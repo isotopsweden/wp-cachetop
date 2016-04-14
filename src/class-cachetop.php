@@ -1,5 +1,8 @@
 <?php
 
+use Cachetop\Stores\Filesystem;
+use Cachetop\Stores\Redis;
+
 final class Cachetop {
 
 	/**
@@ -13,7 +16,7 @@ final class Cachetop {
 	 * The constructor.
 	 */
 	public function __construct() {
-		$this->store = new Store( [
+		$this->store = Redis::instance( [
 			'redis' => true
 		] );
 
@@ -47,7 +50,7 @@ final class Cachetop {
 		// If the cache is empty, it should create a new.
 		if ( empty( $cache ) ) {
 			ob_start( [$this, 'set_cache'] );
-			return;
+			exit;
 		}
 
 		// Render cached html.
@@ -89,7 +92,7 @@ final class Cachetop {
 
 		$hash = $this->generate_hash();
 
-		$this->store->set( $hash, $data, $this->get_expires_time() );
+		$this->store->set( $hash, $data );
 
 		// Save hash on the post for later use, e.g deleting cache file.
 		if ( $id = get_the_ID() ) {
