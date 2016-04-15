@@ -50,7 +50,7 @@ final class Cachetop {
 		// If the cache is empty, it should create a new.
 		if ( empty( $cache ) ) {
 			ob_start( [$this, 'set_cache'] );
-			exit;
+			return;
 		}
 
 		// Render cached html.
@@ -92,7 +92,11 @@ final class Cachetop {
 
 		$hash = $this->generate_hash();
 
-		$this->store->set( $hash, $data );
+		try {
+			$this->store->set( $hash, $data );
+		} catch ( Exception $e ) {
+
+		}
 
 		// Save hash on the post for later use, e.g deleting cache file.
 		if ( $id = get_the_ID() ) {

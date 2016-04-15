@@ -41,7 +41,7 @@ class Filesystem extends Store {
 	 * @param array $args
 	 */
 	protected function __construct( array $args ) {
-		$this->args = array_merge( $this->default_args, $args );
+		$this->args       = array_merge( $this->default_args, $args );
 		$this->filesystem = new LeagueFilesystem( $this->get_adapter() );
 	}
 

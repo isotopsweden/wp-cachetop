@@ -31,7 +31,7 @@ class Redis extends Store {
 	 * @param array $args
 	 */
 	protected function __construct( array $args ) {
-		$this->args = array_merge( $this->default_args, $args );
+		$this->args   = array_merge( $this->default_args, $args );
 		$this->client = new Client( [
 			'scheme' => $this->args['scheme'],
 			'host'   => $this->args['host'],
@@ -101,9 +101,8 @@ class Redis extends Store {
 		$this->execute_command( 'set', [$key, $data] );
 
 		if ( $this->args['expires'] > 0 ) {
-#			$expire = HOUR_IN_SECONDS * $this->args['expires'];
-#			var_dump($expire);exit;
-#			$this->execute_command( 'expire', [$key, $expire] );
+			$expire = HOUR_IN_SECONDS * $this->args['expires'];
+			$this->execute_command( 'expire', [$key, $expire] );
 		}
 	}
 }
