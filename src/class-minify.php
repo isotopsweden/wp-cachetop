@@ -1,5 +1,7 @@
 <?php
 
+namespace Cachetop;
+
 class Minify {
 
 	/**

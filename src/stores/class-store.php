@@ -36,6 +36,11 @@ abstract class Store {
 	abstract public function delete( $key );
 
 	/**
+	 * Flush will flush all cached data.
+	 */
+	abstract public function flush();
+
+	/**
 	 * Read cached string from store.
 	 *
 	 * @param  string $key

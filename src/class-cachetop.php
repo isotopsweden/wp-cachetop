@@ -1,23 +1,67 @@
 <?php
 
+namespace Cachetop;
+
 use Cachetop\Stores\Filesystem;
 use Cachetop\Stores\Redis;
 
 final class Cachetop {
 
 	/**
+	 * Query string action.
+	 *
+	 * @var null|string
+	 */
+	private $action;
+
+	/**
 	 * The cache store.
 	 *
 	 * @var Store
 	 */
-	public $store;
+	private $store;
 
 	/**
 	 * The constructor.
 	 */
 	public function __construct() {
-		$this->store = Redis::instance();
+		$this->action = isset( $_GET['cachetop'] ) ? $_GET['cachetop'] : null;
+		$this->store  = Redis::instance();
 		$this->setup_actions();
+	}
+
+	/**
+	 * Add clear cache button to admin bar menu.
+	 *
+	 * @param object $wp_admin_bar
+	 */
+	public function admin_bar_menu( $wp_admin_bar ) {
+		$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$url = parse_url( $url, PHP_URL_HOST ) . parse_url( $url, PHP_URL_PATH );
+		$url = $url . '?';
+
+		// Add site cache menu.
+		$wp_admin_bar->add_menu( [
+			'id'    => 'cachetop',
+			'title' => __( 'Site cache', 'cachetop' ),
+			'href'  => $url . 'cachetop=clear'
+		] );
+
+		// Add clear cache menu.
+		$wp_admin_bar->add_menu( [
+			'id'     => 'cachetop-clear',
+			'parent' => 'cachetop',
+			'title'  => __( 'Clear cache', 'cachetop' ),
+			'href'   => $url . 'cachetop=clear'
+		] );
+
+		// Add flush all caches menu.
+		$wp_admin_bar->add_menu( [
+			'id'     => 'cachetop-flush',
+			'parent' => 'cachetop',
+			'title'  => __( 'Flush all caches', 'cachetop' ),
+			'href'   => $url . 'cachetop=flush'
+		] );
 	}
 
 	/**
@@ -25,7 +69,11 @@ final class Cachetop {
 	 *
 	 * @param int $post_id
 	 */
-	public function clear_post_cache( $post_id ) {
+	public function clear_post_cache( $post_id = 0 ) {
+		if ( empty( $post_id ) && get_the_ID() !== 0 ) {
+			$post_id = get_the_ID();
+		}
+
 		if ( $hash = get_post_meta( $post_id, '_cachetop_hash', true ) ) {
 			$this->store->delete( $hash );
 		}
@@ -35,10 +83,26 @@ final class Cachetop {
 	 * Handle cached or uncached pages.
 	 */
 	public function handle_cache() {
+		// If a query string action exists
+		// it should be handle.
+		switch ( $this->action ) {
+			case 'clear':
+				$this->store->delete( $this->generate_hash() );
+				$this->clear_post_cache();
+				return;
+			case 'flush':
+				$this->store->flush();
+				return;
+			default:
+				break;
+		}
+
+		// Check if the given url should be bypassed or not.
 		if ( $this->should_bypass() ) {
 			return;
 		}
 
+		// Generate a hash based on the url.
 		$hash = $this->generate_hash();
 
 		// Try to find the cached html for the hash.
@@ -51,26 +115,30 @@ final class Cachetop {
 		}
 
 		// Render cached html.
-		echo $cache . sprintf( '<!-- cached by cachetop - %s - hash: %s -->', date_i18n(
-				'd.m.Y H:i:s',
-				current_time( 'timestamp' )
-			), $hash );
+		echo sprintf(
+			'%s %s',
+			$cache,
+			sprintf( '<!-- cached by cachetop - %s - hash: %s -->', date_i18n( 'd.m.Y H:i:s', current_time( 'timestamp' ) ), $hash )
+		);
 
 		exit;
 	}
 
 	/**
-	 * Genrate hash for the current or given url.
+	 * Genrate hash based on the current or given url.
 	 *
 	 * @param  string $url
+	 * @param  bool   $qs
 	 * @param  string $algo
 	 *
 	 * @return string
 	 */
-	private function generate_hash( $url = '', $algo = 'sha256' ) {
+	private function generate_hash( $url = '', $qs = false, $algo = 'sha256' ) {
 		if ( empty( $url ) ) {
 			$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-		} else {
+		}
+
+		if ( ! $qs ) {
 			$url = parse_url( $url, PHP_URL_HOST ) . parse_url( $url, PHP_URL_PATH );
 		}
 
@@ -113,6 +181,8 @@ final class Cachetop {
 		} else {
 			add_action( 'template_redirect', [$this, 'handle_cache'], 0 );
 		}
+
+		add_action( 'admin_bar_menu', [$this, 'admin_bar_menu'], 999 );
 	}
 
 	/**

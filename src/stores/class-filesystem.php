@@ -63,6 +63,17 @@ class Filesystem extends Store {
 	}
 
 	/**
+	 * Flush will flush all cached data.
+	 */
+	public function flush() {
+		/**
+		 * @TODO implement
+		 */
+		// maybe?
+		// $this->filesystem->deleteDir('.');
+	}
+
+	/**
 	 * Get store adapter.
 	 *
 	 * @return \League\Flysystem\Cached\CachedAdapter

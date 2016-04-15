@@ -4,13 +4,15 @@
  * Plugin name: Cachetop
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/class-minify.php';
-require_once __DIR__ . '/src/stores/class-store.php';
-require_once __DIR__ . '/src/stores/class-filesystem.php';
-require_once __DIR__ . '/src/stores/class-redis.php';
-require_once __DIR__ . '/src/class-cachetop.php';
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require_once __DIR__ . '/vendor/autoload.php';
+}
 
+/**
+ * Bootstrap the Cachetop plugin.
+ *
+ * @return \Cachetop\Cachetop
+ */
 add_action( 'plugins_loaded', function () {
-	new Cachetop();
+	new \Cachetop\Cachetop();
 } );

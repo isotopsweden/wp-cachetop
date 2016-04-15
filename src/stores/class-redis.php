@@ -35,19 +35,9 @@ class Redis extends Store {
 		$this->client = new Client( [
 			'scheme' => $this->args['scheme'],
 			'host'   => $this->args['host'],
-			'port'   => $this->args['port']
+			'port'   => $this->args['port'],
+			'prefix' => 'cachetop'
 		] );
-	}
-
-	/**
-	 * Create key.
-	 *
-	 * @param  string $hash
-	 *
-	 * @return string
-	 */
-	protected function create_key( $hash ) {
-		return sprintf( 'cachetop:%s', $hash );
 	}
 
     /**
@@ -72,7 +62,18 @@ class Redis extends Store {
 	 * @return bool
 	 */
 	public function delete( $key ) {
-		return $this->execute_command( 'del', [$this->create_key( $key )] );
+		return $this->execute_command( 'del', [$key] );
+	}
+
+	/**
+	 * Flush will flush all cached data.
+	 */
+	public function flush() {
+		$keys = $this->execute_command( 'keys', ['cachetop:*'] );
+
+		foreach ( $keys as $key ) {
+			$this->delete( $key );
+		}
 	}
 
 	/**
@@ -83,7 +84,7 @@ class Redis extends Store {
 	 * @return null|string
 	 */
 	public function read( $key ) {
-		if ( $data = $this->execute_command( 'get', [$this->create_key( $key )] ) ) {
+		if ( $data = $this->execute_command( 'get', [$key] ) ) {
 			return base64_decode( $data );
 		}
 	}
@@ -95,7 +96,6 @@ class Redis extends Store {
 	 * @param  string $data
 	 */
 	public function set( $key, $data ) {
-		$key  = $this->create_key( $key );
 		$data = base64_encode( $data );
 
 		$this->execute_command( 'set', [$key, $data] );
