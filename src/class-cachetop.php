@@ -16,10 +16,7 @@ final class Cachetop {
 	 * The constructor.
 	 */
 	public function __construct() {
-		$this->store = Redis::instance( [
-			'redis' => true
-		] );
-
+		$this->store = Redis::instance();
 		$this->setup_actions();
 	}
 

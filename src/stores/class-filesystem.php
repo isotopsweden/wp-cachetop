@@ -24,7 +24,7 @@ class Filesystem extends Store {
 	 * @var array
 	 */
 	private $default_args = [
-		'expires' => 12,
+		'expires' => 1,
 		'redis'   => false
 	];
 
@@ -69,8 +69,7 @@ class Filesystem extends Store {
 	 */
 	protected function get_adapter() {
 		$local_adapter = new Adapter( WP_CONTENT_DIR . '/cache/cachetop' );
-		$cache_store   = $this->args['redis']
-			? new RedisCacheStore() : new MemoryCacheStore();
+		$cache_store   = $this->args['redis'] ? new RedisCacheStore() : new MemoryCacheStore();
 
 		return new CachedAdapter( $local_adapter, $cache_store );
 	}
@@ -121,6 +120,7 @@ class Filesystem extends Store {
 				// since the cache has expired.
 				if ( time() > ( HOUR_IN_SECONDS * $this->args['expires'] ) * $time ) {
 					$this->filesystem->delete( $file );
+
 					return;
 				}
 			}

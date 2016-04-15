@@ -19,7 +19,7 @@ class Redis extends Store {
 	 * @var array
 	 */
 	private $default_args = [
-		'expires' => 12,
+		'expires' => 1,
 		'scheme'  => 'tcp',
 		'host'    => 'localhost',
 		'port'    => 6379
