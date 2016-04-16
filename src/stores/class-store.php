@@ -27,13 +27,13 @@ abstract class Store {
 	}
 
 	/**
-	 * Check if key exists.
+	 * Count number of keys.
 	 *
 	 * @param  string $key
 	 *
 	 * @return bool
 	 */
-	abstract public function exists( $key );
+	abstract public function count();
 
 	/**
 	 * Delete cached data by key.
@@ -43,6 +43,15 @@ abstract class Store {
 	 * @return bool
 	 */
 	abstract public function delete( $key );
+
+	/**
+	 * Check if key exists.
+	 *
+	 * @param  string $key
+	 *
+	 * @return bool
+	 */
+	abstract public function exists( $key );
 
 	/**
 	 * Flush will flush all cached data.
