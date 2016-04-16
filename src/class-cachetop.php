@@ -31,6 +31,31 @@ final class Cachetop {
 	}
 
 	/**
+	 * Add dashboard count with pages cached.
+	 *
+	 * @param  array $items
+	 *
+	 * @return array
+	 */
+	public function add_dashboard_count( array $items = [] ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$count = $this->store->count();
+
+		$items[] = sprintf(
+			'<a href="%s" title="%s">%s %s</a>',
+			add_query_arg( ['page' => 'cachetop'], admin_url( 'options-general.php' ) ),
+			__( 'Pages cached', 'cachetop' ),
+			$count,
+			__( 'Pages cached', 'cachetop' )
+		);
+
+		return $items;
+	}
+
+	/**
 	 * Add clear cache button to admin bar menu.
 	 *
 	 * @param object $wp_admin_bar
@@ -39,12 +64,13 @@ final class Cachetop {
 		$url   = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 		$url   = parse_url( $url, PHP_URL_HOST ) . parse_url( $url, PHP_URL_PATH );
 		$color = $this->store->exists( $this->generate_hash( $url ) ) ? 'green' : 'red';
+		$count = $this->store->count();
 		$url   = $url . '?';
 
 		// Add site cache menu.
 		$wp_admin_bar->add_menu( [
 			'id'    => 'cachetop',
-			'title' => sprintf( '<span style="%s%s"></span> %s', 'height: 18px;width: 18px;border-radius: 50%;background: #ccc;display: inline-block;vertical-align: middle;margin-right: 7px;position: relative;bottom: 2px;color: #fff;text-align: center;vertical-align: middle;line-height: 19px;', 'background: ' . $color . ';', __( 'Site cache', 'cachetop' ) ),
+			'title' => sprintf( '<span style="%s%s">%s</span> %s', 'height: 18px;width: 18px;border-radius: 50%;background: #ccc;display: inline-block;vertical-align: middle;margin-right: 7px;position: relative;bottom: 2px;color: #fff;text-align: center;vertical-align: middle;line-height: 19px;', 'background: ' . $color . ';', $count, __( 'Site cache', 'cachetop' ) ),
 			'href'  => $url . 'cachetop=clear'
 		] );
 
@@ -81,21 +107,35 @@ final class Cachetop {
 	}
 
 	/**
-	 * Handle cached or uncached pages.
+	 * Handle cache action, both on the frontend and WordPress admin.
+	 *
+	 * @return bool
 	 */
-	public function handle_cache() {
+	public function handle_cache_action() {
 		// If a query string action exists
 		// it should be handle.
 		switch ( $this->action ) {
 			case 'clear':
 				$this->store->delete( $this->generate_hash() );
 				$this->clear_post_cache();
-				return;
+				return true;
 			case 'flush':
 				$this->store->flush();
-				return;
+				return true;
 			default:
 				break;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Handle cached or uncached pages.
+	 */
+	public function handle_cache() {
+		// Handle cache action.
+		if ( $this->handle_cache_action() ) {
+			return;
 		}
 
 		// Check if the given url should be bypassed or not.
@@ -178,12 +218,16 @@ final class Cachetop {
 	 */
 	private function setup_actions() {
 		if ( is_admin() ) {
+			add_action( 'admin_init', [$this, 'handle_cache_action'], 0 );
+			add_action( 'dashboard_glance_items', [$this, 'add_dashboard_count'] );
 			add_action( 'save_post', [$this, 'clear_post_cache'], 0 );
 		} else {
 			add_action( 'template_redirect', [$this, 'handle_cache'], 0 );
 		}
 
 		add_action( 'admin_bar_menu', [$this, 'admin_bar_menu'], 999 );
+		add_action( 'switch_theme', [$this, 'flush_cache'] );
+		// wp_trash_post
 	}
 
 	/**
