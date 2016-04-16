@@ -46,20 +46,14 @@ class Filesystem extends Store {
 	}
 
 	/**
-	 * Check if key exists.
+	 * Count number of keys.
 	 *
 	 * @param  string $key
 	 *
 	 * @return bool
 	 */
-	public function exists( $key ) {
-		if ( ! is_string( $key ) ) {
-			return false;
-		}
-
-		$file = $this->get_file_name( $key );
-
-		return $this->filesystem->has( $file );
+	public function count() {
+		return count( $this->filesystem->listContents() );
 	}
 
 	/**
@@ -80,14 +74,31 @@ class Filesystem extends Store {
 	}
 
 	/**
+	 * Check if key exists.
+	 *
+	 * @param  string $key
+	 *
+	 * @return bool
+	 */
+	public function exists( $key ) {
+		if ( ! is_string( $key ) ) {
+			return false;
+		}
+
+		$file = $this->get_file_name( $key );
+
+		return $this->filesystem->has( $file );
+	}
+
+	/**
 	 * Flush will flush all cached data.
 	 */
 	public function flush() {
-		/**
-		 * @TODO implement
-		 */
-		// maybe?
-		// $this->filesystem->deleteDir('.');
+		$contents = $this->filesystem->listContents();
+
+		foreach ( $contents as $content ) {
+			$this->filesystem->delete( $content['basename'] );
+		}
 	}
 
 	/**
