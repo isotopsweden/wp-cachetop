@@ -36,14 +36,15 @@ final class Cachetop {
 	 * @param object $wp_admin_bar
 	 */
 	public function admin_bar_menu( $wp_admin_bar ) {
-		$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-		$url = parse_url( $url, PHP_URL_HOST ) . parse_url( $url, PHP_URL_PATH );
-		$url = $url . '?';
+		$url   = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$url   = parse_url( $url, PHP_URL_HOST ) . parse_url( $url, PHP_URL_PATH );
+		$color = $this->store->exists( $this->generate_hash( $url ) ) ? 'green' : 'red';
+		$url   = $url . '?';
 
 		// Add site cache menu.
 		$wp_admin_bar->add_menu( [
 			'id'    => 'cachetop',
-			'title' => __( 'Site cache', 'cachetop' ),
+			'title' => sprintf( '<span style="%s%s"></span> %s', 'height: 18px;width: 18px;border-radius: 50%;background: #ccc;display: inline-block;vertical-align: middle;margin-right: 7px;position: relative;bottom: 2px;color: #fff;text-align: center;vertical-align: middle;line-height: 19px;', 'background: ' . $color . ';', __( 'Site cache', 'cachetop' ) ),
 			'href'  => $url . 'cachetop=clear'
 		] );
 

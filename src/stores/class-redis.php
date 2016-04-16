@@ -33,10 +33,11 @@ class Redis extends Store {
 	protected function __construct( array $args ) {
 		$this->args   = array_merge( $this->default_args, $args );
 		$this->client = new Client( [
-			'scheme' => $this->args['scheme'],
-			'host'   => $this->args['host'],
-			'port'   => $this->args['port'],
-			'prefix' => 'cachetop'
+			'scheme'   => $this->args['scheme'],
+			'host'     => $this->args['host'],
+			'port'     => $this->args['port']
+		], [
+			'prefix'   => 'cachetop:'
 		] );
 	}
 
@@ -53,6 +54,17 @@ class Redis extends Store {
 
         return $this->client->executeCommand( $command );
     }
+
+	/**
+	 * Check if key exists.
+	 *
+	 * @param  string $key
+	 *
+	 * @return bool
+	 */
+	public function exists( $key ) {
+		return $this->execute_command( 'exists', [$key] );
+	}
 
 	/**
 	 * Delete cached data by key.

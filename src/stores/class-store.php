@@ -27,6 +27,15 @@ abstract class Store {
 	}
 
 	/**
+	 * Check if key exists.
+	 *
+	 * @param  string $key
+	 *
+	 * @return bool
+	 */
+	abstract public function exists( $key );
+
+	/**
 	 * Delete cached data by key.
 	 *
 	 * @param  string $key

@@ -46,6 +46,23 @@ class Filesystem extends Store {
 	}
 
 	/**
+	 * Check if key exists.
+	 *
+	 * @param  string $key
+	 *
+	 * @return bool
+	 */
+	public function exists( $key ) {
+		if ( ! is_string( $key ) ) {
+			return false;
+		}
+
+		$file = $this->get_file_name( $key );
+
+		return $this->filesystem->has( $file );
+	}
+
+	/**
 	 * Delete cached data by key.
 	 *
 	 * @param  string $key
