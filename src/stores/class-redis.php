@@ -7,6 +7,13 @@ use Predis\Client;
 class Redis extends Store {
 
 	/**
+	 * The Redis prefix.
+	 *
+	 * @var string
+	 */
+	private $prefix = 'cachetop:';
+
+	/**
 	 * Predis client instance.
 	 *
 	 * @var \Predis\Client
@@ -37,7 +44,7 @@ class Redis extends Store {
 			'host'     => $this->args['host'],
 			'port'     => $this->args['port']
 		], [
-			'prefix'   => 'cachetop:'
+			'prefix'   => $this->prefix
 		] );
 	}
 
@@ -56,14 +63,14 @@ class Redis extends Store {
     }
 
 	/**
-	 * Check if key exists.
+	 * Count number of keys.
 	 *
 	 * @param  string $key
 	 *
 	 * @return bool
 	 */
-	public function exists( $key ) {
-		return $this->execute_command( 'exists', [$key] );
+	public function count() {
+		return count( $this->execute_command( 'keys', ['*'] ) );
 	}
 
 	/**
@@ -78,10 +85,21 @@ class Redis extends Store {
 	}
 
 	/**
+	 * Check if key exists.
+	 *
+	 * @param  string $key
+	 *
+	 * @return bool
+	 */
+	public function exists( $key ) {
+		return $this->execute_command( 'exists', [$key] );
+	}
+
+	/**
 	 * Flush will flush all cached data.
 	 */
 	public function flush() {
-		$keys = $this->execute_command( 'keys', ['cachetop:*'] );
+		$keys = $this->execute_command( 'keys', ['*'] );
 
 		foreach ( $keys as $key ) {
 			$this->delete( $key );
