@@ -67,10 +67,18 @@ final class Cachetop {
 		$count = $this->store->count();
 		$url   = $url . '?';
 
+		// Generate icon html.
+		$title = sprintf(
+			'<span style="%s%s">%s</span> %s', 'height: 18px;width: 18px;border-radius: 50%;background: #ccc;display: inline-block;vertical-align: middle;margin-right: 7px;position: relative;bottom: 2px;color: #fff;text-align: center;vertical-align: middle;line-height: 19px;',
+			'background: ' . $color . ';',
+			$count,
+			__( 'Site cache', 'cachetop' )
+		);
+
 		// Add site cache menu.
 		$wp_admin_bar->add_menu( [
 			'id'    => 'cachetop',
-			'title' => sprintf( '<span style="%s%s">%s</span> %s', 'height: 18px;width: 18px;border-radius: 50%;background: #ccc;display: inline-block;vertical-align: middle;margin-right: 7px;position: relative;bottom: 2px;color: #fff;text-align: center;vertical-align: middle;line-height: 19px;', 'background: ' . $color . ';', $count, __( 'Site cache', 'cachetop' ) ),
+			'title' => $title,
 			'href'  => $url . 'cachetop=clear'
 		] );
 
