@@ -249,12 +249,12 @@ final class Cachetop {
 		}
 
 		// Don't cache:
-		// - Search page
-		// - 404 page
-		// - Feed page
-		// - Trackback page
-		// - Robots file
-		// - If preview
+		// - Search page.
+		// - 404 page.
+		// - Feed page.
+		// - Trackback page.
+		// - Robots file.
+		// - If preview.
 		// - If post requires password.
 		// - If user is logged in.
 		if ( is_search() || is_404() || is_feed() || is_trackback() || is_robots() || is_preview() || post_password_required() || is_user_logged_in() ) {
@@ -263,6 +263,14 @@ final class Cachetop {
 
 		// Plugins like WooCommerce can have this constant.
 		if ( defined( 'DONOTCACHEPAGE' ) && DONOTCACHEPAGE ) {
+			return true;
+		}
+
+		// Don't cache WooCommerce pages:
+		// - Cart page.
+		// - Checkout page.
+		// - Account page.
+		if ( function_exists( 'is_woocommerce' ) && ( is_cart() || is_checkout() || is_account_page() ) ) {
 			return true;
 		}
 
