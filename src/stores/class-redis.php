@@ -107,13 +107,13 @@ class Redis extends Store {
 	}
 
 	/**
-	 * Read cached string from store.
+	 * Get cached string from store.
 	 *
 	 * @param  string $key
 	 *
 	 * @return null|string
 	 */
-	public function read( $key ) {
+	public function get( $key ) {
 		if ( $data = $this->execute_command( 'get', [$key] ) ) {
 			return base64_decode( $data );
 		}

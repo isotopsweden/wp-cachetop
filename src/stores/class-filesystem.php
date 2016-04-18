@@ -136,13 +136,13 @@ class Filesystem extends Store {
 	}
 
 	/**
-	 * Read cached string from store.
+	 * Get cached string from store.
 	 *
 	 * @param  string $key
 	 *
 	 * @return null|string
 	 */
-	public function read( $key ) {
+	public function get( $key ) {
 		if ( ! is_string( $key ) ) {
 			return;
 		}

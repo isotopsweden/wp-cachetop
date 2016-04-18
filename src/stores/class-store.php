@@ -59,13 +59,13 @@ abstract class Store {
 	abstract public function flush();
 
 	/**
-	 * Read cached string from store.
+	 * Get cached string from store.
 	 *
 	 * @param  string $key
 	 *
 	 * @return null|string
 	 */
-	abstract public function read( $key );
+	abstract public function get( $key );
 
 	/**
 	 * Set string to cache in store.

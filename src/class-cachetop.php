@@ -174,7 +174,7 @@ final class Cachetop {
 		$hash = $this->generate_hash();
 
 		// Try to find the cached html for the hash.
-		$cache = $this->store->read( $hash );
+		$cache = $this->store->get( $hash );
 
 		// If the cache is empty, it should create a new.
 		if ( empty( $cache ) ) {
