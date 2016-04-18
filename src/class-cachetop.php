@@ -246,7 +246,10 @@ final class Cachetop {
 			header( 'Last-Modified: ' . $time );
 			header( 'ETag: ' . md5( $timestamp . $hash ) );
 
-			if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $time ) {
+			$time_check = isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] === $time;
+			$etag_check = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && $_SERVER['HTTP_IF_NONE_MATCH'] === md5( $timestamp . $hash );
+
+			if ( $etag_check || $time_check ) {
 				header( 'HTTP/1.1 304 Not Modified' );
 			}
 		}
