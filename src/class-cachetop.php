@@ -43,6 +43,7 @@ final class Cachetop {
 	 */
 	public function __construct() {
 		$this->action = isset( $_GET['cachetop'] ) ? $_GET['cachetop'] : null;
+		$this->load_textdomain();
 		$this->setup_actions();
 		$this->setup_options();
 		$this->setup_store();
@@ -193,6 +194,22 @@ final class Cachetop {
 		);
 
 		exit;
+	}
+
+	/**
+	 * Load Localisation files.
+	 *
+	 * Locales found in:
+	 * - WP_LANG_DIR/cachetop/cachetop-LOCALE.mo
+	 * - WP_CONTENT_DIR/[mu-]plugins/cachetop/languages/cachetop-LOCALE.mo
+	 */
+	private function load_textdomain() {
+		// Find plugins path.
+		$dir    = plugin_dir_path( __FILE__ );
+		$locale = apply_filters( 'plugin_locale', get_locale(), 'cachetop' );
+
+		load_textdomain( 'cachetop', WP_LANG_DIR . '/cachetop/cachetop-' . $locale . '.mo' );
+		load_textdomain( 'cachetop', $dir . '../languages/cachetop-' . $locale . '.mo' );
 	}
 
 	/**
