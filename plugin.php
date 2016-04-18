@@ -2,6 +2,12 @@
 
 /**
  * Plugin name: Cachetop
+ * Description: Cache pages by generating static HTML and store it in Redis or Filesystem.
+ * Author: Fredrik Forsmo
+ * Author URI: https://frozzare.com
+ * Version: 1.0.0
+ * Textdomain: cachetop
+ * Domain Path: /languages/
  */
 
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
