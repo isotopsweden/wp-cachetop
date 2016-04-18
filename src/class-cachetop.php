@@ -138,34 +138,6 @@ final class Cachetop {
 	}
 
 	/**
-	 * Set http headers.
-	 *
-	 * @param string $hash
-	 * @param int    $timestamp
-	 */
-	public function set_headers( $hash, $timestamp = null ) {
-		// Sen cache control headers with public and max age values.
-		header( 'Cache-Control: public, max-age=' . HOUR_IN_SECONDS * 1 );
-
-		// If no timestamp, fetch it from the post.
-		if ( empty( $timestamp ) ) {
-			$timestamp = get_post_meta( get_the_ID(), '_cachetop_time', true );
-		}
-
-		// Send last modified and etag headers if we have a timestamp.
-		if ( $timestamp ) {
-			$time = gmdate( 'D, d M Y H:i:s ', $timestamp ) . 'GMT';
-
-			header( 'Last-Modified: ' . $time );
-			header( 'ETag: ' . md5( $timestamp . $hash ) );
-
-			if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $time ) {
-				header( 'HTTP/1.1 304 Not Modified' );
-			}
-		}
-	}
-
-	/**
 	 * Handle cached or uncached pages.
 	 */
 	public function handle_cache() {
@@ -250,6 +222,34 @@ final class Cachetop {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Set http headers.
+	 *
+	 * @param string $hash
+	 * @param int    $timestamp
+	 */
+	private function set_headers( $hash, $timestamp = null ) {
+		// Sen cache control headers with public and max age values.
+		header( 'Cache-Control: public, max-age=' . HOUR_IN_SECONDS * 1 );
+
+		// If no timestamp, fetch it from the post.
+		if ( empty( $timestamp ) ) {
+			$timestamp = get_post_meta( get_the_ID(), '_cachetop_time', true );
+		}
+
+		// Send last modified and etag headers if we have a timestamp.
+		if ( $timestamp ) {
+			$time = gmdate( 'D, d M Y H:i:s ', $timestamp ) . 'GMT';
+
+			header( 'Last-Modified: ' . $time );
+			header( 'ETag: ' . md5( $timestamp . $hash ) );
+
+			if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $time ) {
+				header( 'HTTP/1.1 304 Not Modified' );
+			}
+		}
 	}
 
 	/**
