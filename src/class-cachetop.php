@@ -148,6 +148,7 @@ final class Cachetop {
 
 		// Check if the given url should be bypassed or not.
 		if ( $this->should_bypass() ) {
+			header( 'Cache-Control: no-cache' );
 			return;
 		}
 
