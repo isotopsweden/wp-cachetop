@@ -131,8 +131,7 @@ class Redis extends Store {
 		$this->execute_command( 'set', [$key, $data] );
 
 		if ( $this->args['expires'] > 0 ) {
-			$expire = HOUR_IN_SECONDS * $this->args['expires'];
-			$this->execute_command( 'expire', [$key, $expire] );
+			$this->execute_command( 'expire', [$key, $this->args['expires']] );
 		}
 	}
 }

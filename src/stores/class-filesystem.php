@@ -157,7 +157,7 @@ class Filesystem extends Store {
 				// If time is bigger than expires and file timestamp
 				// the file should be deleted and null should be returned
 				// since the cache has expired.
-				if ( time() > ( HOUR_IN_SECONDS * $this->args['expires'] ) * $time ) {
+				if ( time() > $this->args['expires'] * $time ) {
 					$this->filesystem->delete( $file );
 
 					return;

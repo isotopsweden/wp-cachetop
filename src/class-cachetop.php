@@ -20,8 +20,8 @@ final class Cachetop {
 	 * @var array
 	 */
 	private $default_options = [
-		'expires' => 1,
-		'store'   => 'redis'
+		'expires' => 3600,   // seconds
+		'store'   => 'redis' // 'filesystem' or 'redis'
 	];
 
 	/**
