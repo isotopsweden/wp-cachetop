@@ -15,6 +15,23 @@ final class Cachetop {
 	private $action;
 
 	/**
+	 * Default options.
+	 *
+	 * @var array
+	 */
+	private $default_options = [
+		'expires' => 1,
+		'store'   => 'redis'
+	];
+
+	/**
+	 * Cachetop options.
+	 *
+	 * @var object
+	 */
+	private $options;
+
+	/**
 	 * The cache store.
 	 *
 	 * @var Store
@@ -26,8 +43,9 @@ final class Cachetop {
 	 */
 	public function __construct() {
 		$this->action = isset( $_GET['cachetop'] ) ? $_GET['cachetop'] : null;
-		$this->store  = Redis::instance();
 		$this->setup_actions();
+		$this->setup_options();
+		$this->setup_store();
 	}
 
 	/**
@@ -271,6 +289,34 @@ final class Cachetop {
 
 		add_action( 'admin_bar_menu', [$this, 'admin_bar_menu'], 999 );
 		add_action( 'switch_theme', [$this, 'flush_cache'] );
+	}
+
+	/**
+	 * Setup options.
+	 */
+	private function setup_options() {
+		// Modify options with a filter.
+		$options = apply_filters( 'cachetop/options', $this->default_options );
+		$options = is_array( $options ) ? $options : $this->default_options;
+
+		// Use a object instead of a array for options internally.
+		$this->options = (object) $options;
+
+		// Make store option lowercase.
+		$this->options->store = strtolower( $this->options->store );
+	}
+
+	/**
+	 * Setup store.
+	 */
+	private function setup_store() {
+		$options = [
+			'expires' => $this->options->expires
+		];
+
+		$this->store = $this->options->store === 'redis' ?
+			Redis::instance( $options ) :
+			Filesystem::instance( $options );
 	}
 
 	/**
