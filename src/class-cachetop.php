@@ -97,23 +97,23 @@ final class Cachetop {
 		$wp_admin_bar->add_menu( [
 			'id'    => 'cachetop',
 			'title' => $title,
-			'href'  => $url . 'cachetop=clear'
+			'href'  => $url . 'cachetop=flush'
 		] );
 
-		// Add clear cache menu.
+		// Add flush cache menu.
 		$wp_admin_bar->add_menu( [
-			'id'     => 'cachetop-clear',
+			'id'     => 'cachetop-flush',
 			'parent' => 'cachetop',
-			'title'  => __( 'Clear cache', 'cachetop' ),
-			'href'   => $url . 'cachetop=clear'
+			'title'  => __( 'Flush cache', 'cachetop' ),
+			'href'   => $url . 'cachetop=flush'
 		] );
 
 		// Add flush all caches menu.
 		$wp_admin_bar->add_menu( [
-			'id'     => 'cachetop-flush',
+			'id'     => 'cachetop-flush-all',
 			'parent' => 'cachetop',
 			'title'  => __( 'Flush all caches', 'cachetop' ),
-			'href'   => $url . 'cachetop=flush'
+			'href'   => $url . 'cachetop=flush-all'
 		] );
 	}
 
@@ -130,29 +130,6 @@ final class Cachetop {
 		if ( $hash = get_post_meta( $post_id, '_cachetop_hash', true ) ) {
 			$this->store->delete( $hash );
 		}
-	}
-
-	/**
-	 * Handle cache action, both on the frontend and WordPress admin.
-	 *
-	 * @return bool
-	 */
-	public function handle_cache_action() {
-		// If a query string action exists
-		// it should be handle.
-		switch ( $this->action ) {
-			case 'clear':
-				$this->store->delete( $this->generate_hash() );
-				$this->clear_post_cache();
-				return true;
-			case 'flush':
-				$this->store->flush();
-				return true;
-			default:
-				break;
-		}
-
-		return false;
 	}
 
 	/**
@@ -193,6 +170,29 @@ final class Cachetop {
 		);
 
 		exit;
+	}
+
+	/**
+	 * Handle cache action, both on the frontend and WordPress admin.
+	 *
+	 * @return bool
+	 */
+	public function handle_cache_action() {
+		// If a query string action exists
+		// it should be handle.
+		switch ( $this->action ) {
+			case 'flush':
+				$this->store->delete( $this->generate_hash() );
+				$this->clear_post_cache();
+				return true;
+			case 'flush-all':
+				$this->store->flush();
+				return true;
+			default:
+				break;
+		}
+
+		return false;
 	}
 
 	/**
