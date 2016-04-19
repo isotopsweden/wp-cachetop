@@ -1,3 +1,6 @@
+lint\:php:
+	vendor/bin/phpcs -s --extensions=php --standard=phpcs.xml src/
+
 pot:
 	xgettext --language=php \
            --add-comments=L10N \

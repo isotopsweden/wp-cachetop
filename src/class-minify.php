@@ -18,10 +18,10 @@ class Minify {
 	protected function should_minify( $value ) {
 		return ! ( is_string( $value ) && (
 			preg_match( '/skipmin/', $value )
-         	|| preg_match( '/<(pre|textarea)/', $value )
-         	|| preg_match( '/<script[^\??>]*>[^<\/script>]/', $value )
-         	|| preg_match( '/value=("|\')(.*)([ ]{2,})(.*)("|\')/', $value )
-        ) );
+			|| preg_match( '/<(pre|textarea)/', $value )
+			|| preg_match( '/<script[^\??>]*>[^<\/script>]/', $value )
+			|| preg_match( '/value=("|\')(.*)([ ]{2,})(.*)("|\')/', $value )
+		) );
 	}
 
 	/**
@@ -33,18 +33,18 @@ class Minify {
 	 */
 	public function compress( $value ) {
 		if ( $this->should_minify( $value ) ) {
-			$replace = array(
+			$replace = [
 				'/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->).)*-->/s' => '',
-                "/<\?php/"                                            => '<?php ',
-                "/\n([\S])/"                                          => ' $1',
-                "/\r/"                                                => '',
-                "/\n/"                                                => '',
-                "/\t/"                                                => ' ',
-                "/ +/"                                                => ' ',
-                '/\[(google[\w:\s]+)\]/'                              => '<!--$1-->'
-            );
+				'/<\?php/'                                           => '<?php ',
+				'/\n([\S])/'                                          => ' $1',
+				'/\r/'                                                => '',
+				'/\n/'                                                => '',
+				'/\t/'                                                => ' ',
+				'/ +/'                                                => ' ',
+				'/\[(google[\w:\s]+)\]/'                              => '<!--$1-->'
+			];
 
-            return preg_replace( array_keys( $replace ), array_values( $replace ), $value );
+			return preg_replace( array_keys( $replace ), array_values( $replace ), $value );
 		}
 
 		return $value;

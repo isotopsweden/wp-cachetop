@@ -39,28 +39,31 @@ class Redis extends Store {
 	 */
 	protected function __construct( array $args ) {
 		$this->args   = array_merge( $this->default_args, $args );
-		$this->client = new Client( [
-			'scheme'   => $this->args['scheme'],
-			'host'     => $this->args['host'],
-			'port'     => $this->args['port']
-		], [
-			'prefix'   => $this->prefix
-		] );
+		$this->client = new Client(
+			[
+				'scheme'   => $this->args['scheme'],
+				'host'     => $this->args['host'],
+				'port'     => $this->args['port']
+			],
+			[
+				'prefix'   => $this->prefix
+			]
+		);
 	}
 
-    /**
-     * Execute a Predis command.
-     *
-     * @param  string $name
-     * @param  array  $arguments
-     *
-     * @return string
-     */
-    protected function execute_command( $name, array $arguments ) {
-        $command = $this->client->createCommand( $name, $arguments );
+	/**
+	 * Execute a Predis command.
+	 *
+	 * @param  string $name
+	 * @param  array  $arguments
+	 *
+	 * @return string
+	 */
+	protected function execute_command( $name, array $arguments ) {
+		$command = $this->client->createCommand( $name, $arguments );
 
-        return $this->client->executeCommand( $command );
-    }
+		return $this->client->executeCommand( $command );
+	}
 
 	/**
 	 * Count number of keys.
