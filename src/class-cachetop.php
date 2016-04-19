@@ -393,7 +393,7 @@ final class Cachetop {
 		}
 
 		// Only cache get requests.
-		if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || $_SERVER['REQUEST_METHOD'] !== 'GET' ) {
+		if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || strtolower( $_SERVER['REQUEST_METHOD'] ) !== 'get' ) {
 			return true;
 		}
 
