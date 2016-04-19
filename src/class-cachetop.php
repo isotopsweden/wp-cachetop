@@ -222,6 +222,20 @@ final class Cachetop {
 	 * @return string
 	 */
 	private function generate_hash( $url = '', $qs = false, $algo = 'sha256' ) {
+		$url = $this->get_url( $url, $qs );
+
+		return hash( $algo, $url );
+	}
+
+	/**
+	 * Get url with or without query strings.
+	 *
+	 * @param  string $url
+	 * @param  bool   $qs
+	 *
+	 * @return string
+	 */
+	private function get_url( $url = '', $qs = false ) {
 		if ( empty( $url ) ) {
 			$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 		}
@@ -230,7 +244,7 @@ final class Cachetop {
 			$url = parse_url( $url, PHP_URL_HOST ) . parse_url( $url, PHP_URL_PATH );
 		}
 
-		return hash( $algo, $url );
+		return $url;
 	}
 
 	/**
@@ -337,12 +351,18 @@ final class Cachetop {
 	}
 
 	/**
-	 * Should bypass cache?
+	 * Check if cache should be bypass or not.
 	 *
 	 * @return bool
 	 */
 	protected function should_bypass() {
+		// Bypass cache easy with a filter.
 		if ( apply_filters( 'cachetop/bypass', false ) ) {
+			return true;
+		}
+
+		// Bypass by exclude a url.
+		if ( apply_filters( 'cachetop/exclude_url', $this->get_url() ) ) {
 			return true;
 		}
 
