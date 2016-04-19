@@ -361,7 +361,7 @@ final class Cachetop {
 		}
 
 		// Bypass by exclude a url.
-		if ( apply_filters( 'cachetop/exclude_url', $this->get_url() ) ) {
+		if ( apply_filters( 'cachetop/exclude_url', $this->get_url() ) === true ) {
 			return true;
 		}
 
