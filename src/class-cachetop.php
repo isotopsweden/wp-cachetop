@@ -61,8 +61,7 @@ final class Cachetop {
 			return;
 		}
 
-		$count = $this->store->count();
-
+		$count   = $this->store->count();
 		$items[] = sprintf(
 			'<a href="%s" title="%s">%s %s</a>',
 			add_query_arg( ['page' => 'cachetop'], admin_url( 'options-general.php' ) ),
