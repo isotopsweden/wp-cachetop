@@ -196,6 +196,31 @@ final class Cachetop {
 	}
 
 	/**
+	 * Check if user is logged in or not.
+	 *
+	 * @return bool
+	 */
+	private function is_user_logged_in() {
+		// Try to check if user is logged in with
+		// build in function.
+		if ( is_user_logged_in() ) {
+			return true;
+		}
+
+		// No cookies means not logged in.
+		if ( empty( $_COOKIE ) ) {
+			return false;
+		}
+
+		// Check for WordPress cookies for logged in users.
+		foreach ( array_keys( $_COOKIE ) as $key ) {
+			if ( preg_match( '/^(wp-postpass|wordpress_logged_in|comment_author)_/', $key ) ) {
+				return true;
+			}
+		}
+	}
+
+	/**
 	 * Load Localisation files.
 	 *
 	 * Locales found in:
@@ -371,10 +396,14 @@ final class Cachetop {
 		// - Feed page.
 		// - Trackback page.
 		// - Robots file.
-		// - If preview.
+		// - If preview page.
 		// - If post requires password.
-		// - If user is logged in.
-		if ( is_search() || is_404() || is_feed() || is_trackback() || is_robots() || is_preview() || post_password_required() || is_user_logged_in() ) {
+		if ( is_search() || is_404() || is_feed() || is_trackback() || is_robots() || is_preview() || post_password_required() ) {
+			return true;
+		}
+
+		// Check if user is logged in or not, ca be bypassed with a filter.
+		if ( apply_filters( 'cachetop/bypass_logged_in', $this->is_user_logged_in() ) ) {
 			return true;
 		}
 
