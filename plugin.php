@@ -20,5 +20,5 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
  * @return \Cachetop\Cachetop
  */
 add_action( 'plugins_loaded', function () {
-	new \Cachetop\Cachetop();
+	return new \Cachetop\Cachetop;
 } );
