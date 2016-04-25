@@ -8,7 +8,7 @@ class Cachetop_Test extends \WP_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
-		$this->cachetop = new Cachetop;		
+		$this->cachetop = new Cachetop;
 	}
 
 	public function tearDown() {
@@ -54,6 +54,11 @@ class Cachetop_Test extends \WP_UnitTestCase {
 
 		$this->cachetop->clear_post_cache( $post_id );
 		$this->assertEmpty( get_post_meta( $post_id, '_cachetop_hash', true ) );
+	}
+
+	public function test_handle_cache_bypass() {
+		add_filter( 'cachetop/bypass', '__return_true' );
+		$this->assertNull( $this->cachetop->handle_cache() );
 	}
 
 	public function test_handle_cache_action_flush() {
