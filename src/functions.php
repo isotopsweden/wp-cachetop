@@ -8,16 +8,9 @@
  * @param  array|string $fn
  * @param  array        $args
  */
-function cachetop_unfragment( $id, $fn, array $args = [] ) {
-	// If no `$id` is required by the developer we can generate a uniq id.
-	if ( is_array( $fn ) ) {
-		$args = $fn;
-		$fn = $id;
-		$id = uniqid();
-	}
-
+function cachetop_unfragment( $fn, array $args = [] ) {
 	// Both `$id` and `$fn` should be a string.
-	if ( ! is_string( $id ) || ! is_string( $fn ) ) {
+	if ( ! is_string( $fn ) ) {
 		return;
 	}
 
@@ -35,7 +28,7 @@ function cachetop_unfragment( $id, $fn, array $args = [] ) {
 	$data = base64_encode( $data );
 
 	// Output cachetop comments and the function output.
-	echo sprintf( '<!-- cachetop: unfragment:%s:%s -->', $id, $data );
+	echo sprintf( '<!-- cachetop: unfragment:%s -->', $data );
 	echo call_user_func_array( $fn, $args );
 	echo '<!-- cachetop: end -->';
 }

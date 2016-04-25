@@ -168,7 +168,7 @@ final class Cachetop {
 		$timestamp = null;
 
 		// 1. Action
-		// 2. ID (action(:id(:data)))
+		// 2. ID (action(:data))
 		// 3. Content
 		$reg = '/<\!\-\-\s*cachetop\:\s*(\w+(?:(?:\:)([\s\S]*?)|))\s*\-\-\>([\s\S]*?)\<\!\-\-\s*cachetop\:\s*end\s*\-\-\>/';
 		preg_match_all( $reg, $cache, $matches );
@@ -180,31 +180,26 @@ final class Cachetop {
 			for ( $i = 0, $l = count( $matches[0] ); $i < $l; $i++ ) {
 				$parts  = explode( ':', $matches[1][$i] );
 				$action = strtolower( isset( $parts[0] ) ? $parts[0] : '' );
-				$id     = trim( isset( $parts[1] ) ? $parts[1] : '' );
-				$data   = trim( isset( $parts[2] ) ? $parts[2] : '' );
+				$data   = trim( isset( $parts[1] ) ? $parts[1] : '' );
 
 				// Replace html that should be unfragment with new data.
-				if ( $action === 'unfragment' ) {
-					if ( is_string( $data ) && ! empty( $data ) ) {
-						$data = base64_decode( $data );
-						$data = json_decode( $data );
-						$data = (array) $data;
+				if ( $action === 'unfragment' && ! empty( $data ) ) {
+					$data = base64_decode( $data );
+					$data = json_decode( $data );
+					$data = (array) $data;
 
-						// A function to call is required.
-						if ( empty( $data['fn'] ) ) {
-							continue;
-						}
-
-						// Fetch uncached value from function.
-						ob_start();
-						echo call_user_func_array( $data['fn'], (array) $data['args'] );
-						$unfragment = ob_get_clean();
-					} else {
-						$unfragment = apply_filters( 'cachetop/get_unfragment', $id, $matches[2][$i] );
+					// A function to call is required.
+					if ( empty( $data['fn'] ) ) {
+						continue;
 					}
 
-					// If the uncached value don't match the id we can replace it.
-					if ( $unfragment !== $id ) {
+					// Fetch uncached value from function.
+					ob_start();
+					echo call_user_func_array( $data['fn'], (array) $data['args'] );
+					$unfragment = ob_get_clean();
+
+					// If the uncached value don't match the data we can replace it.
+					if ( $unfragment !== $data ) {
 						$cache     = str_replace( $matches[0][$i], $unfragment, $cache );
 						$timestamp = false;
 					}
