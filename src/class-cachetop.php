@@ -231,7 +231,10 @@ final class Cachetop {
 			sprintf( '<!-- cached by cachetop - %s - hash: %s -->', date_i18n( 'd.m.Y H:i:s', current_time( 'timestamp' ) ), $hash )
 		);
 
-		wp_die();
+		// Instead of using `exit` here we can just change the request method
+		// since WordPress will exit on `HEAD` request and this method can be
+		// tested since `exit` breaks unit tests.
+		$_SERVER['REQUEST_METHOD'] = 'HEAD';
 	}
 
 	/**

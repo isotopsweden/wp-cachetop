@@ -8,15 +8,12 @@ class Cachetop_Test extends \WP_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
-		$this->cachetop = new Cachetop;
+		$this->cachetop = new Cachetop;		
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 		unset( $this->cacehtop );
-	}
-
-	public function wp_die_handler( $message ) {
 	}
 
 	public function test_admin_bar_menu() {
