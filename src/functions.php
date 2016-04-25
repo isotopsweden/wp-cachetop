@@ -1,9 +1,5 @@
 <?php
 
-function woocommerce_mini_cart() {
-	echo 'cart => ' . time();
-}
-
 /**
  * Output cachetop fragment cache.
  * It will be updated on every page reload.
