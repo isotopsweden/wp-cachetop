@@ -48,7 +48,7 @@ class Cachetop_Test extends \WP_UnitTestCase {
 
 		$this->cachetop->set_cache( 'Hello' );
 
-		$this->cachetop->handle_cache();
+		$this->cachetop->handle_cache( false );
 		$this->expectOutputRegex( '/Hello/' );
 		$this->expectOutputRegex( '/cachetop/' );
 
@@ -79,7 +79,7 @@ class Cachetop_Test extends \WP_UnitTestCase {
 
 		$_GET['cachetop'] = 'flush-all';
 		$this->cachetop->handle_cache_action();
-		$this->cachetop->handle_cache();
+		$this->cachetop->handle_cache( false );
 		$this->expectOutputRegex( '//' );
 	}
 }

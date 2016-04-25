@@ -131,8 +131,10 @@ final class Cachetop {
 
 	/**
 	 * Handle cached or uncached pages.
+	 *
+	 * @param bool $exit
 	 */
-	public function handle_cache() {
+	public function handle_cache( $exit = true ) {
 		// Handle cache action.
 		if ( $this->handle_cache_action() ) {
 			return;
@@ -231,13 +233,7 @@ final class Cachetop {
 			sprintf( '<!-- cached by cachetop - %s - hash: %s -->', date_i18n( 'd.m.Y H:i:s', current_time( 'timestamp' ) ), $hash )
 		);
 
-		// Instead of using `exit` here we can just change the request method
-		// since WordPress will exit on `HEAD` request and this method can be
-		// tested since `exit` breaks unit tests.
-		$_SERVER['REQUEST_METHOD'] = 'HEAD';
-
-		// Always return true with `exit_on_http_head` filter.
-		add_filter( 'exit_on_http_head', '__return_true', 0 );
+		$exit && exit;
 	}
 
 	/**
