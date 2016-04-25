@@ -163,6 +163,12 @@ final class Cachetop {
 			return;
 		}
 
+		// Add a constant that can be used to know if the function
+		// is called from the cachetop plugin or not.
+		if ( ! defined( 'DOING_CACHETOP' ) ) {
+			define( 'DOING_CACHETOP', true );
+		}
+
 		// Header timestamp.
 		// Should be false if not modified otherwise null.
 		$timestamp = null;
@@ -199,12 +205,17 @@ final class Cachetop {
 						continue;
 					}
 
-					// Fetch uncached value from function.
+					// Should it be passed as a array or not?
+					// Default is true.
+					$args = (array) $data['args'];
+					$args = $data['arr_arg'] ? [$args] : $args;
+
+					// Fetch unfragment value from function.
 					ob_start();
-					echo call_user_func_array( $data['fn'], (array) $data['args'] );
+					echo call_user_func_array( $data['fn'], $args );
 					$unfragment = ob_get_clean();
 
-					// If the uncached value don't match the data we can replace it.
+					// If the unfragment value don't match the data we can replace it.
 					if ( $unfragment !== $data ) {
 						$cache     = str_replace( $matches[0][$i], $unfragment, $cache );
 						$timestamp = false;

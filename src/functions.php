@@ -4,11 +4,11 @@
  * Output fragment data with information so
  * it can be replaced when a page loads.
  *
- * @param  string       $id
- * @param  array|string $fn
- * @param  array        $args
+ * @param  string $fn
+ * @param  array  $args
+ * @param  bool   $arr_arg
  */
-function cachetop_unfragment( $fn, array $args = [] ) {
+function cachetop_unfragment( $fn, array $args = [], $arr_arg = true ) {
 	// Both `$id` and `$fn` should be a string.
 	if ( ! is_string( $fn ) ) {
 		return;
@@ -19,17 +19,18 @@ function cachetop_unfragment( $fn, array $args = [] ) {
 		return;
 	}
 
-	// Add a cachetop value with so the unfragment functions
-	// can know that cachetop is calling the function.
-	$args['cachetop'] = true;
-
 	// Prepare data for JSON and base64 encoding.
 	$data = [
-		'fn'   => $fn,
-		'args' => $args
+		'fn'      => $fn,
+		'args'    => $args,
+		'arr_arg' => $arr_arg
 	];
 	$data = json_encode( $data );
 	$data = base64_encode( $data );
+
+	// Should it be passed as a array or not?
+	// Default is true.
+	$args = $arr_arg ? [$args] : $args;
 
 	// Output cachetop comments and the function output.
 	echo sprintf( '<!-- cachetop: unfragment:%s -->', $data );
