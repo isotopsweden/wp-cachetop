@@ -193,6 +193,12 @@ final class Cachetop {
 						continue;
 					}
 
+					// Check so the function exists before
+					// using it.
+					if ( ! function_exists( $data['fn'] ) ) {
+						continue;
+					}
+
 					// Fetch uncached value from function.
 					ob_start();
 					echo call_user_func_array( $data['fn'], (array) $data['args'] );
@@ -202,6 +208,7 @@ final class Cachetop {
 					if ( $unfragment !== $data ) {
 						$cache     = str_replace( $matches[0][$i], $unfragment, $cache );
 						$timestamp = false;
+						continue;
 					}
 				}
 			}

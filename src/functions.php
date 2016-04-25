@@ -19,6 +19,10 @@ function cachetop_unfragment( $fn, array $args = [] ) {
 		return;
 	}
 
+	// Add a cachetop value with so the unfragment functions
+	// can know that cachetop is calling the function.
+	$args['cachetop'] = true;
+
 	// Prepare data for JSON and base64 encoding.
 	$data = [
 		'fn'   => $fn,
