@@ -8,13 +8,6 @@ use Cachetop\Stores\Redis;
 final class Cachetop {
 
 	/**
-	 * Query string action.
-	 *
-	 * @var null|string
-	 */
-	private $action;
-
-	/**
 	 * Default options.
 	 *
 	 * @var array
@@ -46,7 +39,6 @@ final class Cachetop {
 	 * The constructor.
 	 */
 	public function __construct() {
-		$this->action = isset( $_GET['cachetop'] ) ? $_GET['cachetop'] : null;
 		$this->load_textdomain();
 		$this->setup_actions();
 		$this->setup_options();
@@ -178,7 +170,7 @@ final class Cachetop {
 		$timestamp = null;
 
 		// 1. Action
-		// 2. ID (action(:data))
+		// 2. Data (action(:data))
 		// 3. Content
 		$reg = '/<\!\-\-\s*cachetop\:\s*(\w+(?:(?:\:)([\s\S]*?)|))\s*\-\-\>([\s\S]*?)\<\!\-\-\s*cachetop\:\s*end\s*\-\-\>/';
 		preg_match_all( $reg, $cache, $matches );
@@ -248,9 +240,11 @@ final class Cachetop {
 	 * @return bool
 	 */
 	public function handle_cache_action() {
+		$action = isset( $_GET['cachetop'] ) ? $_GET['cachetop'] : '';
+
 		// If a query string action exists
 		// it should be handle.
-		switch ( $this->action ) {
+		switch ( $action ) {
 			case 'flush':
 				$this->store->delete( $this->generate_hash() );
 				$this->clear_post_cache();
@@ -453,7 +447,7 @@ final class Cachetop {
 	 *
 	 * @return bool
 	 */
-	protected function should_bypass() {
+	private function should_bypass() {
 		// Bypass cache easy with a filter.
 		if ( apply_filters( 'cachetop/bypass', false ) ) {
 			return true;

@@ -58,4 +58,31 @@ class Cachetop_Test extends \WP_UnitTestCase {
 		$this->cachetop->clear_post_cache( $post_id );
 		$this->assertEmpty( get_post_meta( $post_id, '_cachetop_hash', true ) );
 	}
+
+	public function test_handle_cache_action_flush() {
+		$post_id = $this->factory->post->create();
+
+		global $post;
+		$post = get_post( $post_id );
+
+		$this->cachetop->set_cache( 'Hello' );
+
+		$_GET['cachetop'] = 'flush';
+		$this->cachetop->handle_cache_action();
+		$this->assertEmpty( get_post_meta( $post_id, '_cachetop_hash', true ) );
+	}
+
+	public function test_handle_cache_action_flush_all() {
+		$post_id = $this->factory->post->create();
+
+		global $post;
+		$post = get_post( $post_id );
+
+		$this->cachetop->set_cache( 'Hello' );
+
+		$_GET['cachetop'] = 'flush-all';
+		$this->cachetop->handle_cache_action();
+		$this->cachetop->handle_cache();
+		$this->expectOutputRegex( '//' );
+	}
 }
