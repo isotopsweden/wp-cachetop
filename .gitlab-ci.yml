@@ -1,10 +1,10 @@
-image: php:5.6
+image: wordpress
 
 services:
   - mysql:latest
 
 before_script:
-  - apt-get update -qq && apt-get install -y -qq apt-utils redis-server wget git subversion mysql-client php5-mysql
+  - apt-get update -qq && apt-get install -y -qq apt-utils redis-server wget git subversion mysql-client
   - wget https://getcomposer.org/download/1.0.2/composer.phar
   - chmod +x composer.phar
   - ./composer.phar self-update
