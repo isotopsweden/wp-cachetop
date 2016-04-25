@@ -4,7 +4,7 @@ services:
   - mysql:latest
 
 before_script:
-  - apt-get update -qq && apt-get install -y -qq apt-utils redis-server wget git subversion mysql-client
+  - apt-get update -qq && apt-get install -y -qq apt-utils redis-server wget git subversion mysql-client php5-mysql
   - wget https://getcomposer.org/download/1.0.2/composer.phar
   - chmod +x composer.phar
   - ./composer.phar self-update
