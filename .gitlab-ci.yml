@@ -1,16 +1,19 @@
 image: wordpress
 
+services:
+  - mysql:latest
+
 before_script:
-  - apt-get update -qq && apt-get install -y -qq redis-server wget git subversion apt-utils
-  - echo mysql-server mysql-server/root_password password '' | debconf-set-selections
-  - echo mysql-server mysql-server/root_password_again password '' | debconf-set-selections
-  - apt-get install -y -qq mysql-server
+  - apt-get update -qq && apt-get install -y -qq redis-server wget git subversion mysql-client
   - wget https://getcomposer.org/download/1.0.2/composer.phar
   - chmod +x composer.phar
   - ./composer.phar self-update
   - ./composer.phar install --no-interaction --prefer-source
-  - bash vendor/frozzare/wp-test-suite/bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest
+  - bash vendor/frozzare/wp-test-suite/bin/install-wp-tests.sh wordpress_test root root mysql latest
 
 test:
   script:
     php vendor/bin/phpunit
+
+variables:
+  MYSQL_ROOT_PASSWORD: root
