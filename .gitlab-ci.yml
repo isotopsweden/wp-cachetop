@@ -1,15 +1,16 @@
-image: wordpress
+image: php:5.6
 
 services:
   - mysql:latest
 
 before_script:
-  - apt-get update -qq && apt-get install -y -qq redis-server wget git subversion mysql-client
+  - apt-get update -qq && apt-get install -y -qq apt-utils redis-server wget git subversion mysql-client
   - wget https://getcomposer.org/download/1.0.2/composer.phar
   - chmod +x composer.phar
   - ./composer.phar self-update
   - ./composer.phar install --no-interaction --prefer-source
   - bash vendor/frozzare/wp-test-suite/bin/install-wp-tests.sh wordpress_test root root mysql latest
+  - service redis-server restart
 
 test:
   script:
