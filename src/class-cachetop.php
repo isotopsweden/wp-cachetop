@@ -38,6 +38,10 @@ final class Cachetop {
 	 */
 	private $store;
 
+	public function get_store() {
+		return $this->store;
+	}
+
 	/**
 	 * The constructor.
 	 */
@@ -159,8 +163,57 @@ final class Cachetop {
 			return;
 		}
 
+		// Header timestamp.
+		// Should be false if not modified otherwise null.
+		$timestamp = null;
+
+		// 1. Action
+		// 2. ID (action(:id(:data)))
+		// 3. Content
+		$reg = '/<\!\-\-\s*cachetop\:\s*(\w+(?:(?:\:)([\s\S]*?)|))\s*\-\-\>([\s\S]*?)\<\!\-\-\s*cachetop\:\s*end\s*\-\-\>/';
+		preg_match_all( $reg, $cache, $matches );
+
+		// Modify the cached content.
+		if ( ! empty( $matches ) ) {
+			$len = count( $matches[0] );
+
+			for ( $i = 0, $l = count( $matches[0] ); $i < $l; $i++ ) {
+				$parts  = explode( ':', $matches[1][$i] );
+				$action = strtolower( isset( $parts[0] ) ? $parts[0] : '' );
+				$id     = trim( isset( $parts[1] ) ? $parts[1] : '' );
+				$data   = trim( isset( $parts[2] ) ? $parts[2] : '' );
+
+				// Replace fragment cache.
+				if ( $action === 'fragment' ) {
+					if ( is_string( $data ) && ! empty( $data ) ) {
+						$data = base64_decode( $data );
+						$data = json_decode( $data );
+						$data = (array) $data;
+
+						// A function to call is required.
+						if ( empty( $data['fn'] ) ) {
+							continue;
+						}
+
+						// Fetch fragment html from function.
+						ob_start();
+						echo call_user_func_array( $data['fn'], (array) $data['args'] );
+						$fragment = ob_get_clean();
+					} else {
+						$fragment = apply_filters( 'cachetop/get_fragment', $id, $matches[2][$i] );
+					}
+
+					// If the fragment don't match the id we can replace it.
+					if ( $fragment !== $id ) {
+						$cache     = str_replace( $matches[0][$i], $fragment, $cache );
+						$timestamp = false;
+					}
+				}
+			}
+		}
+
 		// Send cache headers.
-		$this->set_headers( $hash );
+		$this->set_headers( $hash, $timestamp );
 
 		// Render cached html.
 		echo sprintf(
@@ -302,14 +355,14 @@ final class Cachetop {
 	 * Set http headers.
 	 *
 	 * @param string $hash
-	 * @param int    $timestamp
+	 * @param mixed  $timestamp
 	 */
 	private function set_headers( $hash, $timestamp = null ) {
 		// Sen cache control headers with public and max age values.
 		header( 'Cache-Control: public, max-age=' . HOUR_IN_SECONDS * 1 );
 
 		// If no timestamp, fetch it from the post.
-		if ( empty( $timestamp ) ) {
+		if ( empty( $timestamp ) && $timestamp !== false ) {
 			$timestamp = get_post_meta( get_the_ID(), '_cachetop_time', true );
 		}
 
