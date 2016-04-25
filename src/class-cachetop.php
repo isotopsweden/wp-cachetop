@@ -235,6 +235,9 @@ final class Cachetop {
 		// since WordPress will exit on `HEAD` request and this method can be
 		// tested since `exit` breaks unit tests.
 		$_SERVER['REQUEST_METHOD'] = 'HEAD';
+
+		// Always return true with `exit_on_http_head` filter.
+		add_filter( 'exit_on_http_head', '__return_true', 0 );
 	}
 
 	/**
