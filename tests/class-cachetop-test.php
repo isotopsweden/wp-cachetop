@@ -52,6 +52,8 @@ class Cachetop_Test extends \WP_UnitTestCase {
 		$this->expectOutputRegex( '/Hello/' );
 		$this->expectOutputRegex( '/cachetop/' );
 
+		$this->assertTrue( defined( 'DOING_CACHETOP' ) && DOING_CACHETOP );
+
 		$this->cachetop->clear_post_cache( $post_id );
 		$this->assertEmpty( get_post_meta( $post_id, '_cachetop_hash', true ) );
 	}
