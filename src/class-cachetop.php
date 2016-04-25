@@ -133,6 +133,7 @@ final class Cachetop {
 
 		if ( $hash = get_post_meta( $post_id, '_cachetop_hash', true ) ) {
 			$this->store->delete( $hash );
+			delete_post_meta( $post_id, '_cachetop_hash' );
 		}
 	}
 
@@ -147,7 +148,10 @@ final class Cachetop {
 
 		// Check if the given url should be bypassed or not.
 		if ( $this->should_bypass() ) {
-			header( 'Cache-Control: no-cache' );
+			if ( ! headers_sent() ) {
+				header( 'Cache-Control: no-cache' );
+			}
+
 			return;
 		}
 
@@ -235,7 +239,7 @@ final class Cachetop {
 			sprintf( '<!-- cached by cachetop - %s - hash: %s -->', date_i18n( 'd.m.Y H:i:s', current_time( 'timestamp' ) ), $hash )
 		);
 
-		exit;
+		wp_die();
 	}
 
 	/**
@@ -371,6 +375,10 @@ final class Cachetop {
 	 * @param mixed  $timestamp
 	 */
 	private function set_headers( $hash, $timestamp = null ) {
+		if ( headers_sent() ) {
+			return;
+		}
+
 		// Sen cache control headers with public and max age values.
 		header( 'Cache-Control: public, max-age=' . HOUR_IN_SECONDS * 1 );
 

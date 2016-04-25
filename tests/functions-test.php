@@ -26,6 +26,6 @@ class Functions_Test extends \WP_UnitTestCase {
 		cachetop_unfragment( 'uniqid', [], false );
 
 		$expected = sprintf( '/\<\!\-\-\scachetop\:\sunfragment\:%s\s\-\-\>/', $data );
-		$this->expectOutputRegex ( $expected );
+		$this->expectOutputRegex( $expected );
 	}
 }
