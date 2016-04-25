@@ -4,9 +4,9 @@
  * Output fragment data with information so
  * it can be replaced when a page loads.
  *
- * @param  string $id
- * @param  string $fn
- * @param  array  $args
+ * @param  string       $id
+ * @param  array|string $fn
+ * @param  array        $args
  */
 function cachetop_unfragment( $id, $fn, array $args = [] ) {
 	// If no `$id` is required by the developer we can generate a uniq id.
