@@ -183,8 +183,8 @@ final class Cachetop {
 				$id     = trim( isset( $parts[1] ) ? $parts[1] : '' );
 				$data   = trim( isset( $parts[2] ) ? $parts[2] : '' );
 
-				// Replace fragment cache.
-				if ( $action === 'fragment' ) {
+				// Replace html that should be unfragment with new data.
+				if ( $action === 'unfragment' ) {
 					if ( is_string( $data ) && ! empty( $data ) ) {
 						$data = base64_decode( $data );
 						$data = json_decode( $data );
@@ -195,24 +195,24 @@ final class Cachetop {
 							continue;
 						}
 
-						// Fetch fragment html from function.
+						// Fetch uncached value from function.
 						ob_start();
 						echo call_user_func_array( $data['fn'], (array) $data['args'] );
-						$fragment = ob_get_clean();
+						$unfragment = ob_get_clean();
 					} else {
-						$fragment = apply_filters( 'cachetop/get_fragment', $id, $matches[2][$i] );
+						$unfragment = apply_filters( 'cachetop/get_unfragment', $id, $matches[2][$i] );
 					}
 
-					// If the fragment don't match the id we can replace it.
-					if ( $fragment !== $id ) {
-						$cache     = str_replace( $matches[0][$i], $fragment, $cache );
+					// If the uncached value don't match the id we can replace it.
+					if ( $unfragment !== $id ) {
+						$cache     = str_replace( $matches[0][$i], $unfragment, $cache );
 						$timestamp = false;
 					}
 				}
 			}
 		}
 
-		// Send cache headers.
+		// Set cache headers.
 		$this->set_headers( $hash, $timestamp );
 
 		// Render cached html.
