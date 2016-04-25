@@ -1,7 +1,10 @@
-image: tutum/lamp
+image: wordpress
 
 before_script:
   - apt-get update -qq && apt-get install -y -qq redis-server wget git subversion
+  - echo mysql-server mysql-server/root_password password '' | debconf-set-selections
+  - echo mysql-server mysql-server/root_password_again password '' | debconf-set-selections
+  - apt-get install -y -qq mysql-server
   - wget https://getcomposer.org/download/1.0.2/composer.phar
   - chmod +x composer.phar
   - ./composer.phar self-update
