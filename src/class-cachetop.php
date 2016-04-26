@@ -13,6 +13,7 @@ final class Cachetop {
 	 * @var array
 	 */
 	private $default_options = [
+		'cookies' => [],
 		'expires' => 3600,   // seconds
 		'store'   => 'redis' // 'filesystem' or 'redis'
 	];
@@ -369,7 +370,7 @@ final class Cachetop {
 
 		// Check for WordPress cookies for logged in users.
 		foreach ( array_keys( $_COOKIE ) as $key ) {
-			if ( preg_match( '/^(wp-postpass|wordpress_logged_in|comment_author)_/', $key ) ) {
+			if ( preg_match( '/^(wp|wordpress|comment_author)/', $key ) ) {
 				return true;
 			}
 		}
@@ -529,9 +530,8 @@ final class Cachetop {
 			'expires' => $this->options->expires
 		];
 
-		$this->store = $this->options->store === 'redis' ?
-			Redis::instance( $options ) :
-			Filesystem::instance( $options );
+		$this->store = $this->options->store === 'redis'
+			? Redis::instance( $options ) : Filesystem::instance( $options );
 	}
 
 	/**
@@ -548,6 +548,13 @@ final class Cachetop {
 		// Bypass by exclude a url.
 		if ( apply_filters( 'cachetop/exclude_url', $this->get_url() ) === true ) {
 			return true;
+		}
+
+		// Exclude pages that that exists in the cookies array.
+		foreach ( array_keys( $_COOKIE ) as $cookie ) {
+			if ( in_array( $cookie, $this->options->cookies ) ) {
+				return true;
+			}
 		}
 
 		// Don't cache:
