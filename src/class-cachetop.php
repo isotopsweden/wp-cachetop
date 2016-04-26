@@ -72,9 +72,9 @@ final class Cachetop {
 	/**
 	 * Add clear cache button to admin bar menu.
 	 *
-	 * @param object $wp_admin_bar
+	 * @param \WP_Admin_Bar $wp_admin_bar
 	 */
-	public function admin_bar_menu( $wp_admin_bar ) {
+	public function admin_bar_menu( \WP_Admin_Bar $wp_admin_bar ) {
 		$url   = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 		$url   = parse_url( $url, PHP_URL_HOST ) . parse_url( $url, PHP_URL_PATH );
 		$color = $this->store->exists( $this->generate_hash( $url ) ) ? 'green' : 'red';
