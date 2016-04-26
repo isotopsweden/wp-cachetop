@@ -43,4 +43,4 @@ The constant `DOING_CACHETOP` will be defined when Cachetop calls a function or 
 
 - `cachetop_flush_hash( $hash )` can flush cache by hash.
 - `cachetop_flush_post( $post_id )` can flush post by post id.
-- `cachetop_flush_url( $url )` can flush cache by url, query strings will be removed.
+- `cachetop_flush_url( $url = '' )` can flush cache by url or the current url, query strings will be removed.
