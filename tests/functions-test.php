@@ -23,6 +23,30 @@ class Functions_Test extends \WP_UnitTestCase {
 
 		$hash = get_post_meta( $post_id, '_cachetop_hash', true );
 		$this->assertTrue( cachetop_flush_hash( $hash ) );
+		$this->assertEmpty( get_post_meta( $post_id, '_cachetop_hash', true ) );
+	}
+
+	public function test_cachetop_flush_post_not_cached() {
+		$post_id = $this->factory->post->create();
+
+		global $post;
+		$post = get_post( $post_id );
+
+		$this->assertFalse( cachetop_flush_post( $post_id ) );
+		$this->assertEmpty( get_post_meta( $post_id, '_cachetop_hash', true ) );
+	}
+
+	public function test_cachetop_flush_post_cached() {
+		$post_id = $this->factory->post->create();
+
+		global $post;
+		$post = get_post( $post_id );
+
+		cachetop()->set_cache( 'Hello' );
+		$this->assertNotEmpty( get_post_meta( $post_id, '_cachetop_hash', true ) );
+
+		$this->assertTrue( cachetop_flush_post( $post_id ) );
+		$this->assertEmpty( get_post_meta( $post_id, '_cachetop_hash', true ) );
 	}
 
 	public function test_cachetop_flush_url() {

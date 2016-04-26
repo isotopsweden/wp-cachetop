@@ -165,7 +165,9 @@ final class Cachetop {
 	/**
 	 * Flush post cache.
 	 *
-	 * @param int $post_id
+	 * @param  int $post_id
+	 *
+	 * @return bool
 	 */
 	public function flush_post( $post_id = 0 ) {
 		if ( empty( $post_id ) && get_the_ID() !== 0 ) {
@@ -173,11 +175,14 @@ final class Cachetop {
 		}
 
 		if ( $hash = get_post_meta( $post_id, '_cachetop_hash', true ) ) {
+			// Clean post fields.
+			$this->clean_post( $post_id );
+
 			// Delete the hash from the store.
-			$this->store->delete( $hash );
+			return $this->store->delete( $hash );
 		}
 
-		$this->clean_post( $post_id );
+		return false;
 	}
 
 	/**

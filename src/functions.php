@@ -21,6 +21,17 @@ function cachetop_flush_hash( $hash ) {
 }
 
 /**
+ * Flush cached html for post.
+ *
+ * @param  int $post_id
+ *
+ * @return bool
+ */
+function cachetop_flush_post( $post_id ) {
+	return cachetop()->flush_post( $post_id );
+}
+
+/**
  * Flush the current url or the given url if it exists.
  *
  * @return bool
