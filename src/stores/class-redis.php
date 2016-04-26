@@ -139,6 +139,7 @@ class Redis extends Store {
 	 * @param  string $data
 	 */
 	public function set( $key, $data ) {
+		$data = $this->minify( $data );
 		$data = base64_encode( $data );
 
 		$this->execute_command( 'set', [$key, $data] );

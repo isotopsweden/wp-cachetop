@@ -2,7 +2,6 @@
 
 namespace Cachetop\Stores;
 
-use Cachetop\Minify;
 use League\Flysystem\Filesystem as LeagueFilesystem;
 use League\Flysystem\Adapter\Local as Adapter;
 use League\Flysystem\Cached\CachedAdapter;
@@ -123,17 +122,6 @@ class Filesystem extends Store {
 	 */
 	protected function get_file_name( $key ) {
 		return sprintf( '%s.html', $key );
-	}
-
-	/**
-	 * Minify html.
-	 *
-	 * @param  string $data
-	 *
-	 * @return string
-	 */
-	protected function minify( $data ) {
-		return ( new Minify )->compress( $data );
 	}
 
 	/**

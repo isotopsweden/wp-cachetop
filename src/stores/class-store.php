@@ -2,6 +2,8 @@
 
 namespace Cachetop\Stores;
 
+use Cachetop\Minify;
+
 abstract class Store {
 
 	/**
@@ -66,6 +68,17 @@ abstract class Store {
 	 * @return null|string
 	 */
 	abstract public function get( $key );
+
+	/**
+	 * Minify html.
+	 *
+	 * @param  string $data
+	 *
+	 * @return string
+	 */
+	protected function minify( $data ) {
+		return ( new Minify )->compress( $data );
+	}
 
 	/**
 	 * Set string to cache in store.
