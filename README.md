@@ -1,6 +1,6 @@
 # Cachetop
 
-Cache plugin that create static HTML files that can be stored in Redis or on the file system.
+Cache plugin that create static HTML files that can be stored in Redis or on the file system. The default cache time is one hour. All posts that are cached will have to post meta keys, `_cachetop_hash` with the cache hash id and `_cachetop_time` with the time when the post was cached.
 
 ### Unfragment
 
@@ -34,6 +34,7 @@ The constant `DOING_CACHETOP` will be defined when Cachetop calls a function or 
 
 ### Filters
 
+- `cachetop/options` should be used to change Cachetop options, like changing from Redis to file system or setting expiration time.
 - `cachetop/bypass` can be used to tell if a page that should be cached should be bypassed.
 - `cachetop/exclude_url` can be used to exclude urls, the first argument is the current url.
 - `cachetop/bypass_logged_in` can be used to tell if logged in users should be cached, this is bad if the admin bar is showed.
