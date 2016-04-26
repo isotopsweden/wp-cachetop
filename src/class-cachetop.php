@@ -302,9 +302,9 @@ final class Cachetop {
 
 		// Render cached html.
 		echo sprintf(
-			'%s %s',
+			'%s%s',
 			$cache,
-			sprintf( "<!-- cached by cachetop, expires in %d seconds, hash: %s -->", $expires, $hash )
+			sprintf( '<!-- cached by cachetop, expires in %d seconds, hash: %s -->', $expires, $hash )
 		);
 
 		// Since exit breaks unit tests we need to check
