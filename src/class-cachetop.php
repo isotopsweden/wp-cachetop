@@ -253,7 +253,9 @@ final class Cachetop {
 
 		// Since exit breaks unit tests we need to check
 		// if we should exit or not.
-		$exit && exit;
+		if ( $exit !== false ) {
+			exit;
+		}
 	}
 
 	/**

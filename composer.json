@@ -1,5 +1,5 @@
 {
-  "name": "frozzare/cachetop",
+  "name": "isotopsweden/cachetop",
   "type": "wordpress-plugin",
   "description": "Cache pages by generating static HTML and store it in Redis or Filesystem",
   "license": "MIT",
