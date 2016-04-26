@@ -2,6 +2,7 @@
 
 namespace Cachetop\Stores;
 
+use Cachetop\Minify;
 use League\Flysystem\Filesystem as LeagueFilesystem;
 use League\Flysystem\Adapter\Local as Adapter;
 use League\Flysystem\Cached\CachedAdapter;
@@ -24,7 +25,7 @@ class Filesystem extends Store {
 	 * @var array
 	 */
 	private $default_args = [
-		'expires' => 1,
+		'expires' => 3600,
 		'redis'   => false
 	];
 
@@ -40,7 +41,7 @@ class Filesystem extends Store {
 	 *
 	 * @param array $args
 	 */
-	protected function __construct( array $args ) {
+	public function __construct( array $args = [] ) {
 		$this->args       = array_merge( $this->default_args, $args );
 		$this->filesystem = new LeagueFilesystem( $this->get_adapter() );
 	}

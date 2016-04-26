@@ -7,6 +7,13 @@ use Predis\Client;
 class Redis extends Store {
 
 	/**
+	 * The expires time in seconds.
+	 *
+	 * @var int
+	 */
+	private $expires = 3600;
+
+	/**
 	 * The Redis prefix.
 	 *
 	 * @var string
@@ -26,10 +33,11 @@ class Redis extends Store {
 	 * @var array
 	 */
 	private $default_args = [
-		'expires' => 1,
-		'scheme'  => 'tcp',
-		'host'    => 'localhost',
-		'port'    => 6379
+		'expires'  => 3600,
+		'scheme'   => 'tcp',
+		'host'     => 'localhost',
+		'database' => 0,
+		'port'     => 6379
 	];
 
 	/**
@@ -37,14 +45,16 @@ class Redis extends Store {
 	 *
 	 * @param array $args
 	 */
-	protected function __construct( array $args ) {
-		$this->args   = array_merge( $this->default_args, $args );
+	public function __construct( array $args = [] ) {
+		$this->args = array_merge( $this->default_args, $args );
+
+		// Save expires config so we can ue `$this->args` to Redis client.
+		$this->expires = $this->args['expires'];
+		unset( $this->args['expires'] );
+
+		// Create a new redis client with cacehtop prefix.
 		$this->client = new Client(
-			[
-				'scheme'   => $this->args['scheme'],
-				'host'     => $this->args['host'],
-				'port'     => $this->args['port']
-			],
+			$this->args,
 			[
 				'prefix'   => $this->prefix
 			]
@@ -133,8 +143,8 @@ class Redis extends Store {
 
 		$this->execute_command( 'set', [$key, $data] );
 
-		if ( $this->args['expires'] > 0 ) {
-			$this->execute_command( 'expire', [$key, $this->args['expires']] );
+		if ( $this->expires > 0 ) {
+			$this->execute_command( 'expire', [$key, $this->expires] );
 		}
 	}
 }
