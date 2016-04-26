@@ -84,7 +84,7 @@ class Redis extends Store {
 	 * @return bool
 	 */
 	public function delete( $key ) {
-		return $this->execute_command( 'del', [$key] );
+		return (bool) $this->execute_command( 'del', [$key] );
 	}
 
 	/**

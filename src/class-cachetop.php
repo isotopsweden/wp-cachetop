@@ -18,6 +18,13 @@ final class Cachetop {
 	];
 
 	/**
+	 * The store instance.
+	 *
+	 * @var Store
+	 */
+	private static $instance;
+
+	/**
 	 * Cachetop options.
 	 *
 	 * @var object
@@ -110,26 +117,6 @@ final class Cachetop {
 	}
 
 	/**
-	 * Flush post cache.
-	 *
-	 * @param int $post_id
-	 */
-	public function flush_post( $post_id = 0 ) {
-		if ( empty( $post_id ) && get_the_ID() !== 0 ) {
-			$post_id = get_the_ID();
-		}
-
-		if ( $hash = get_post_meta( $post_id, '_cachetop_hash', true ) ) {
-			// Delete the hash from the store.
-			$this->store->delete( $hash );
-		}
-
-		// Delete related Cachetop keys from the post.
-		delete_post_meta( $post_id, '_cachetop_hash' );
-		delete_post_meta( $post_id, '_cachetop_time' );
-	}
-
-	/**
 	 * Flush all posts and delete all Cachetop keys.
 	 *
 	 * @return bool
@@ -145,6 +132,65 @@ final class Cachetop {
 		$sql = $wpdb->prepare( $sql, '%_cachetop_%' );
 
 		return $wpdb->query( $sql ) > 0;
+	}
+
+	/**
+	 * Clean post meta fields.
+	 *
+	 * @param int $post_id
+	 */
+	private function clean_post( $post_id = 0 ) {
+		if ( empty( $post_id ) && get_the_ID() !== 0 ) {
+			$post_id = get_the_ID();
+		}
+
+		// Delete related Cachetop keys from the post.
+		delete_post_meta( $post_id, '_cachetop_hash' );
+		delete_post_meta( $post_id, '_cachetop_time' );
+	}
+
+	/**
+	 * Flush cached html by hash.
+	 *
+	 * @param  string $hash
+	 *
+	 * @return bool
+	 */
+	public function flush_hash( $hash ) {
+		$this->clean_post();
+
+		return $this->store->delete( $hash );
+	}
+
+	/**
+	 * Flush post cache.
+	 *
+	 * @param int $post_id
+	 */
+	public function flush_post( $post_id = 0 ) {
+		if ( empty( $post_id ) && get_the_ID() !== 0 ) {
+			$post_id = get_the_ID();
+		}
+
+		if ( $hash = get_post_meta( $post_id, '_cachetop_hash', true ) ) {
+			// Delete the hash from the store.
+			$this->store->delete( $hash );
+		}
+
+		$this->clean_post( $post_id );
+	}
+
+	/**
+	 * Flush the current url or the given url if it exists.
+	 *
+	 * @param  string $url
+	 *
+	 * @return bool
+	 */
+	public function flush_url( $url = '' ) {
+		$hash = $this->generate_hash( $url );
+
+		return $this->flush_hash( $hash );
 	}
 
 	/**
@@ -285,6 +331,21 @@ final class Cachetop {
 	}
 
 	/**
+	 * Get the store instance.
+	 *
+	 * @param  array $args
+	 *
+	 * @return Store
+	 */
+	public static function instance( array $args = [] ) {
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new static( $args );
+		}
+
+		return self::$instance;
+	}
+
+	/**
 	 * Check if user is logged in or not.
 	 *
 	 * @return bool
@@ -378,7 +439,8 @@ final class Cachetop {
 
 		}
 
-		// Save hash on the post for later use, e.g deleting cache file.
+		// Save hash on the post for later use,
+		// e.g deleting cached html from the store.
 		if ( $id = get_the_ID() ) {
 			update_post_meta( $id, '_cachetop_hash', $hash );
 			update_post_meta( $id, '_cachetop_time', time() );

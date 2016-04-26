@@ -1,5 +1,34 @@
 <?php
 
+use Cachetop\Cachetop;
+
+/**
+ * Get the current Cachetop class instance.
+ *
+ * @return \Cachetop\Cachetop
+ */
+function cachetop() {
+	return Cachetop::instance();
+}
+
+/**
+ * Flush cached html by hash.
+ *
+ * @return bool
+ */
+function cachetop_flush_hash( $hash ) {
+	return cachetop()->flush_hash( $hash );
+}
+
+/**
+ * Flush the current url or the given url if it exists.
+ *
+ * @return bool
+ */
+function cachetop_flush_url( $url = '' ) {
+	return cachetop()->flush_url( $url );
+}
+
 /**
  * Output fragment data with information so
  * it can be replaced when a page loads.
