@@ -13,3 +13,5 @@ Example:
     <?php cachetop_unfragment( 'woocommerce_mini_cart' ); ?>
 </div>
 ```
+
+The constant `DOING_CACHETOP` will be defined when Cachetop calls a function or static method when it replacing cached html with fresh html.
