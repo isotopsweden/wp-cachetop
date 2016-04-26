@@ -554,6 +554,11 @@ final class Cachetop {
 			return true;
 		}
 
+		// Check if user is logged in or not, ca be bypassed with a filter.
+		if ( apply_filters( 'cachetop/bypass_logged_in', $this->is_user_logged_in() ) ) {
+			return true;
+		}
+
 		// Exclude pages that that exists in the cookies array.
 		foreach ( array_keys( $_COOKIE ) as $cookie ) {
 			if ( in_array( $cookie, $this->options->cookies ) ) {
@@ -570,11 +575,6 @@ final class Cachetop {
 		// - If preview page.
 		// - If post requires password.
 		if ( is_search() || is_404() || is_feed() || is_trackback() || is_robots() || is_preview() || post_password_required() ) {
-			return true;
-		}
-
-		// Check if user is logged in or not, ca be bypassed with a filter.
-		if ( apply_filters( 'cachetop/bypass_logged_in', $this->is_user_logged_in() ) ) {
 			return true;
 		}
 
