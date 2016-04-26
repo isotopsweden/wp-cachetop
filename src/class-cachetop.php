@@ -132,7 +132,7 @@ final class Cachetop {
 	/**
 	 * Flush all posts and delete all Cachetop keys.
 	 *
-	 * @return mixed
+	 * @return bool
 	 */
 	public function flush_all_posts() {
 		global $wpdb;
