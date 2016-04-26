@@ -120,19 +120,27 @@ final class Cachetop {
 		}
 
 		if ( $hash = get_post_meta( $post_id, '_cachetop_hash', true ) ) {
+			// Delete the hash from the store.
 			$this->store->delete( $hash );
-			delete_post_meta( $post_id, '_cachetop_hash' );
 		}
+
+		// Delete related Cachetop keys from the post.
+		delete_post_meta( $post_id, '_cachetop_hash' );
+		delete_post_meta( $post_id, '_cachetop_time' );
 	}
 
 	/**
-	 * Flush all posts from Cachetop keys.
+	 * Flush all posts and delete all Cachetop keys.
 	 *
 	 * @return mixed
 	 */
 	public function flush_all_posts() {
 		global $wpdb;
 
+		// Flush the store.
+		$this->store->flush();
+
+		// Delete all Cachetop keys from post meta.
 		$sql = "DELETE FROM $wpdb->postmeta WHERE `meta_key` LIKE '%s';";
 		$sql = $wpdb->prepare( $sql, '%_cachetop_%' );
 
@@ -264,7 +272,6 @@ final class Cachetop {
 
 				return true;
 			case 'flush-all':
-				$this->store->flush();
 				$this->flush_all_posts();
 
 				return true;
