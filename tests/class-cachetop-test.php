@@ -33,14 +33,14 @@ class Cachetop_Test extends \WP_UnitTestCase {
 		$this->assertArrayHasKey( 'cachetop-flush-all', $nodes );
 	}
 
-	public function test_clear_post_cache_without_store() {
+	public function test_flush_post_without_store() {
 		$post_id = $this->factory->post->create();
 		update_post_meta( $post_id, '_cachetop_hash', uniqid() );
-		$this->cachetop->clear_post_cache( $post_id );
+		$this->cachetop->flush_post( $post_id );
 		$this->assertEmpty( get_post_meta( $post_id, '_cachetop_hash', true ) );
 	}
 
-	public function test_clear_post_cache_with_store() {
+	public function test_flush_post_with_store() {
 		$post_id = $this->factory->post->create();
 
 		global $post;
@@ -54,7 +54,7 @@ class Cachetop_Test extends \WP_UnitTestCase {
 
 		$this->assertTrue( defined( 'DOING_CACHETOP' ) && DOING_CACHETOP );
 
-		$this->cachetop->clear_post_cache( $post_id );
+		$this->cachetop->flush_post( $post_id );
 		$this->assertEmpty( get_post_meta( $post_id, '_cachetop_hash', true ) );
 	}
 

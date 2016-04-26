@@ -31,10 +31,6 @@ final class Cachetop {
 	 */
 	private $store;
 
-	public function get_store() {
-		return $this->store;
-	}
-
 	/**
 	 * The constructor.
 	 */
@@ -114,11 +110,11 @@ final class Cachetop {
 	}
 
 	/**
-	 * Clear post cache.
+	 * Flush post cache.
 	 *
 	 * @param int $post_id
 	 */
-	public function clear_post_cache( $post_id = 0 ) {
+	public function flush_post( $post_id = 0 ) {
 		if ( empty( $post_id ) && get_the_ID() !== 0 ) {
 			$post_id = get_the_ID();
 		}
@@ -127,6 +123,20 @@ final class Cachetop {
 			$this->store->delete( $hash );
 			delete_post_meta( $post_id, '_cachetop_hash' );
 		}
+	}
+
+	/**
+	 * Flush all posts from Cachetop keys.
+	 *
+	 * @return mixed
+	 */
+	public function flush_all_posts() {
+		global $wpdb;
+
+		$sql = "DELETE FROM $wpdb->postmeta WHERE `meta_key` LIKE '%s';";
+		$sql = $wpdb->prepare( $sql, '%_cachetop_%' );
+
+		return $wpdb->query( $sql ) > 0;
 	}
 
 	/**
@@ -250,11 +260,13 @@ final class Cachetop {
 		// it should be handle.
 		switch ( $action ) {
 			case 'flush':
-				$this->store->delete( $this->generate_hash() );
-				$this->clear_post_cache();
+				$this->flush_post();
+
 				return true;
 			case 'flush-all':
 				$this->store->flush();
+				$this->flush_all_posts();
+
 				return true;
 			default:
 				break;
