@@ -38,3 +38,9 @@ The constant `DOING_CACHETOP` will be defined when Cachetop calls a function or 
 - `cachetop/bypass` can be used to tell if a page that should be cached should be bypassed.
 - `cachetop/exclude_url` can be used to exclude urls, the first argument is the current url.
 - `cachetop/bypass_logged_in` can be used to tell if logged in users should be cached, this is bad if the admin bar is showed.
+
+### Functions
+
+- `cachetop_flush_hash( $hash )` can flush cache by hash.
+- `cachetop_flush_post( $post_id )` can flush post by post id.
+- `cachetop_flush_url( $url )` can flush cache by url, query strings will be removed.
