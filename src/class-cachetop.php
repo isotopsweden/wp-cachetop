@@ -296,11 +296,15 @@ final class Cachetop {
 		// Set cache headers.
 		$this->set_headers( $hash, $timestamp );
 
+		// Fetch the post timestamp so we can calculate expiration time.
+		$timestamp = get_post_meta( get_the_ID(), '_cachetop_time', true );
+		$expires = ( $timestamp + $this->options->expires ) - time();
+
 		// Render cached html.
 		echo sprintf(
 			'%s %s',
 			$cache,
-			sprintf( '<!-- cached by cachetop - %s - hash: %s -->', date_i18n( 'd.m.Y H:i:s', current_time( 'timestamp' ) ), $hash )
+			sprintf( "<!-- cached by cachetop, expires in %d seconds, hash: %s -->", $expires, $hash )
 		);
 
 		// Since exit breaks unit tests we need to check
@@ -370,7 +374,7 @@ final class Cachetop {
 
 		// Check for WordPress cookies for logged in users.
 		foreach ( array_keys( $_COOKIE ) as $key ) {
-			if ( preg_match( '/^(wp|wordpress|comment_author)/', $key ) ) {
+			if ( preg_match( '/^(wp|wordpress|comment_author)/', $key ) && $key !== 'wordpress_test_cookie' ) {
 				return true;
 			}
 		}
@@ -467,7 +471,7 @@ final class Cachetop {
 		}
 
 		// Sen cache control headers with public and max age values.
-		header( 'Cache-Control: public, max-age=' . HOUR_IN_SECONDS * 1 );
+		header( 'Cache-Control: public, max-age=' . $this->options->expires );
 
 		// If no timestamp, fetch it from the post.
 		if ( empty( $timestamp ) && $timestamp !== false ) {
