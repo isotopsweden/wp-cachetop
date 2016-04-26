@@ -233,6 +233,8 @@ final class Cachetop {
 			sprintf( '<!-- cached by cachetop - %s - hash: %s -->', date_i18n( 'd.m.Y H:i:s', current_time( 'timestamp' ) ), $hash )
 		);
 
+		// Since exit breaks unit tests we need to check
+		// if we should exit or not.
 		$exit && exit;
 	}
 
