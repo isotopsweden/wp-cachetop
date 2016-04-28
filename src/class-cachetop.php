@@ -501,8 +501,8 @@ final class Cachetop {
 		if ( is_admin() ) {
 			add_action( 'admin_init', [$this, 'handle_cache_action'], 0 );
 			add_action( 'dashboard_glance_items', [$this, 'add_dashboard_count'] );
-			add_action( 'save_post', [$this, 'clear_post_cache'] );
-			add_action( 'wp_trash_post', [$this, 'clear_post_cache'] );
+			add_action( 'save_post', [$this, 'clean_post'] );
+			add_action( 'wp_trash_post', [$this, 'clean_post'] );
 		} else {
 			add_action( 'template_redirect', [$this, 'handle_cache'], 0 );
 		}
