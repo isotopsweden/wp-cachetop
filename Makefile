@@ -22,7 +22,7 @@ pot:
            --package-name=cachetop \
            --from-code=UTF-8 \
            --output=languages/cachetop.pot \
-           src/**/*.php
+           src/*.php
 	# Add Poedit information to the template file.
 	cat languages/cachetop.pot|perl -pe 's/8bit\\n/8bit\\n\"\n\"X-Poedit-Basepath:\
 	..\\n"\n"X-Poedit-SourceCharset: UTF-8\\n"\n\

@@ -90,7 +90,7 @@ final class Cachetop {
 			'<span style="%s%s">%s</span> %s', 'height: 18px;width: 18px;border-radius: 50%;background: #ccc;display: inline-block;vertical-align: middle;margin-right: 7px;position: relative;bottom: 2px;color: #fff;text-align: center;vertical-align: middle;line-height: 19px;',
 			'background: ' . $color . ';',
 			$count,
-			__( 'Site cache', 'cachetop' )
+			'Cachetop'
 		);
 
 		// Add site cache menu.
