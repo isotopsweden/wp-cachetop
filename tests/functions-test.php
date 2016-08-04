@@ -1,11 +1,13 @@
 <?php
 
-namespace Cachetop\Tests;
+namespace Isotop\Tests\Cachetop;
+
+use Isotop\Cachetop\Cachetop;
 
 class Functions_Test extends \WP_UnitTestCase {
 
 	public function test_cachetop() {
-		$this->assertTrue( cachetop() instanceof \Cachetop\Cachetop );
+		$this->assertTrue( cachetop() instanceof Cachetop );
 	}
 
 	public function test_cachetop_flush_hash_without_store() {

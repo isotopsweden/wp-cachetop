@@ -1,11 +1,13 @@
 <?php
 
-namespace Cachetop\Tests;
+namespace Isotop\Tests\Cachetop;
+
+use Isotop\Cachetop\Minify;
 
 class Minify_Test extends \WP_UnitTestCase {
 
 	public function setUp() {
-		$this->minify = new \Cachetop\Minify();
+		$this->minify = new Minify();
 	}
 
 	public function tearDown() {

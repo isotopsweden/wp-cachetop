@@ -1,6 +1,6 @@
 <?php
 
-namespace Cachetop;
+namespace Isotop\Cachetop;
 
 class Minify {
 

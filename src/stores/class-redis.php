@@ -1,6 +1,6 @@
 <?php
 
-namespace Cachetop\Stores;
+namespace Isotop\Cachetop\Stores;
 
 use Predis\Client;
 

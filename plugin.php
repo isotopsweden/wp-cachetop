@@ -17,8 +17,8 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 /**
  * Bootstrap the Cachetop plugin.
  *
- * @return \Cachetop\Cachetop
+ * @return \Isotop\Cachetop\Cachetop
  */
 add_action( 'plugins_loaded', function () {
-	return \Cachetop\Cachetop::instance();
+	return \Isotop\Cachetop\Cachetop::instance();
 } );

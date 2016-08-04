@@ -1,24 +1,24 @@
 <?php
 
-namespace Cachetop\Stores;
+namespace Isotop\Cachetop\Stores;
 
-use Cachetop\Minify;
+use Isotop\Cachetop\Minify;
 
 abstract class Store {
 
 	/**
-	 * The store instance.
+	 * The class instance.
 	 *
-	 * @var Store
+	 * @var \Isotop\Cachetop\Stores\Store
 	 */
 	private static $instance;
 
 	/**
-	 * Get the store instance.
+	 * Get the class instance.
 	 *
 	 * @param  array $args
 	 *
-	 * @return Store
+	 * @return \Isotop\Cachetop\Stores\Store
 	 */
 	public static function instance( array $args = [] ) {
 		if ( ! isset( self::$instance ) ) {

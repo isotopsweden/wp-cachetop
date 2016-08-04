@@ -1,11 +1,11 @@
 <?php
 
-use Cachetop\Cachetop;
+use Isotop\Cachetop\Cachetop;
 
 /**
  * Get the current Cachetop class instance.
  *
- * @return \Cachetop\Cachetop
+ * @return \Isotop\Cachetop\Cachetop
  */
 function cachetop() {
 	return Cachetop::instance();

@@ -1,8 +1,8 @@
 <?php
 
-namespace Cachetop\Tests;
+namespace Isotop\Tests\Cachetop;
 
-use Cachetop\Cachetop;
+use Isotop\Cachetop\Cachetop;
 
 class Cachetop_Test extends \WP_UnitTestCase {
 

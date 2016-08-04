@@ -1,8 +1,8 @@
 <?php
 
-namespace Cachetop\Tests\Stores;
+namespace Isotop\Tests\Cachetop\Stores;
 
-use Cachetop\Stores\Redis;
+use Isotop\Cachetop\Stores\Redis;
 
 class Redis_Test extends \WP_UnitTestCase {
 

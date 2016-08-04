@@ -1,6 +1,6 @@
 <?php
 
-namespace Cachetop\Stores;
+namespace Isotop\Cachetop\Stores;
 
 use League\Flysystem\Filesystem as LeagueFilesystem;
 use League\Flysystem\Adapter\Local as Adapter;

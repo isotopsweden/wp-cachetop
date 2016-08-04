@@ -1,8 +1,8 @@
 <?php
 
-namespace Cachetop\Tests\Stores;
+namespace Isotop\Tests\Cachetop\Stores;
 
-use Cachetop\Stores\Filesystem;
+use Isotop\Cachetop\Stores\Filesystem;
 
 class Filesystem_Test extends \WP_UnitTestCase {
 

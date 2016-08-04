@@ -1,9 +1,9 @@
 <?php
 
-namespace Cachetop;
+namespace Isotop\Cachetop;
 
-use Cachetop\Stores\Filesystem;
-use Cachetop\Stores\Redis;
+use Isotop\Cachetop\Stores\Filesystem;
+use Isotop\Cachetop\Stores\Redis;
 
 final class Cachetop {
 
@@ -19,9 +19,9 @@ final class Cachetop {
 	];
 
 	/**
-	 * The store instance.
+	 * The class instance.
 	 *
-	 * @var Store
+	 * @var \Isotop\Cachetop\Cachetop
 	 */
 	private static $instance;
 
@@ -35,7 +35,7 @@ final class Cachetop {
 	/**
 	 * The cache store.
 	 *
-	 * @var Store
+	 * @var \Isotop\Cachetop\Stores\Store
 	 */
 	private $store;
 
@@ -341,11 +341,11 @@ final class Cachetop {
 	}
 
 	/**
-	 * Get the store instance.
+	 * Get the class instance.
 	 *
 	 * @param  array $args
 	 *
-	 * @return Store
+	 * @return \Isotop\Cachetop\Cachetop
 	 */
 	public static function instance( array $args = [] ) {
 		if ( ! isset( self::$instance ) ) {
