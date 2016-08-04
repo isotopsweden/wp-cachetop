@@ -1,4 +1,4 @@
-# Cachetop
+# Cachetop [![Build Status](https://travis-ci.org/isotopsweden/wp-cachetop.svg?branch=master)](https://travis-ci.org/isotopsweden/wp-cachetop)
 
 Cache plugin that create static HTML files that can be stored in Redis or on the file system. The default cache time is one hour. All posts that are cached will have to post meta keys, `_cachetop_hash` with the cache hash id and `_cachetop_time` with the time when the post was cached.
 
@@ -44,3 +44,7 @@ The constant `DOING_CACHETOP` will be defined when Cachetop calls a function or 
 - `cachetop_flush_hash( $hash )` can flush cache by hash.
 - `cachetop_flush_post( $post_id )` can flush post by post id.
 - `cachetop_flush_url( $url = '' )` can flush cache by url or the current url, query strings will be removed.
+
+## License
+
+MIT
