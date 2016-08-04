@@ -32,8 +32,5 @@
     "post-update-cmd": "if [ -f vendor/bin/phpcs ]; then \"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs; fi"
   },
   "minimum-stability": "dev",
-  "prefer-stable": true,
-  "support": {
-    "issues": "https://jira.isotop.se/browse/IS"
-  }
+  "prefer-stable": true
 }
