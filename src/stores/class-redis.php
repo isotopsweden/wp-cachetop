@@ -105,7 +105,7 @@ class Redis extends Store {
 	 * @return bool
 	 */
 	public function exists( $key ) {
-		return $this->execute_command( 'exists', [$key] );
+		return $this->execute_command( 'exists', [$key] ) === 1;
 	}
 
 	/**
