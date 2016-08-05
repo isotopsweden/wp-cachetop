@@ -516,7 +516,7 @@ final class Cachetop {
 	 */
 	private function setup_options() {
 		// Modify options with a filter.
-		$options = apply_filters( 'cachetop/options', $this->default_options );
+		$options = apply_filters( 'cachetop_options', $this->default_options );
 		$options = is_array( $options ) ? $options : $this->default_options;
 
 		// Use a object instead of a array for options internally.
@@ -545,17 +545,17 @@ final class Cachetop {
 	 */
 	private function should_bypass() {
 		// Bypass cache easy with a filter.
-		if ( apply_filters( 'cachetop/bypass', false ) ) {
+		if ( apply_filters( 'cachetop_bypass', false ) ) {
 			return true;
 		}
 
 		// Bypass by exclude a url.
-		if ( apply_filters( 'cachetop/exclude_url', $this->get_url() ) === true ) {
+		if ( apply_filters( 'cachetop_exclude_url', $this->get_url() ) === true ) {
 			return true;
 		}
 
 		// Check if user is logged in or not, ca be bypassed with a filter.
-		if ( apply_filters( 'cachetop/bypass_logged_in', $this->is_user_logged_in() ) ) {
+		if ( apply_filters( 'cachetop_bypass_logged_in', $this->is_user_logged_in() ) ) {
 			return true;
 		}
 

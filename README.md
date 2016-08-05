@@ -42,10 +42,10 @@ The constant `DOING_CACHETOP` will be defined when Cachetop calls a function or 
 
 ## Filters
 
-- `cachetop/options` should be used to change Cachetop options, like changing from Redis to file system or setting expiration time.
-- `cachetop/bypass` can be used to tell if a page that should be cached should be bypassed.
-- `cachetop/exclude_url` can be used to exclude urls, the first argument is the current url.
-- `cachetop/bypass_logged_in` can be used to tell if logged in users should be cached, this is bad if the admin bar is showed.
+- `cachetop_options` should be used to change Cachetop options, like changing from Redis to file system or setting expiration time.
+- `cachetop_bypass` can be used to tell if a page that should be cached should be bypassed.
+- `cachetop_exclude_url` can be used to exclude urls, the first argument is the current url.
+- `cachetop_bypass_logged_in` can be used to tell if logged in users should be cached, this is bad if the admin bar is showed.
 
 ## Functions
 
