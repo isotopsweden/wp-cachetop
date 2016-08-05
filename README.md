@@ -16,7 +16,7 @@ With `cachetop_unfragment( $fn, array $args = [] )` you can tell Cachetop to rep
 
 Example:
 
-```
+```php
 <div class="widget_shopping_cart_content">
     <?php cachetop_unfragment( 'woocommerce_mini_cart' ); ?>
 </div>
