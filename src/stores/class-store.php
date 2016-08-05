@@ -31,8 +31,6 @@ abstract class Store {
 	/**
 	 * Count number of keys.
 	 *
-	 * @param  string $key
-	 *
 	 * @return bool
 	 */
 	abstract public function count();

@@ -14,6 +14,8 @@ function cachetop() {
 /**
  * Flush cached html by hash.
  *
+ * @param  string $hash
+ *
  * @return bool
  */
 function cachetop_flush_hash( $hash ) {
@@ -33,6 +35,8 @@ function cachetop_flush_post( $post_id ) {
 
 /**
  * Flush the current url or the given url if it exists.
+ *
+ * @param  string $url
  *
  * @return bool
  */
@@ -65,7 +69,7 @@ function cachetop_unfragment( $fn, array $args = [], $arr_arg = true ) {
 		'args'    => $args,
 		'arr_arg' => $arr_arg
 	];
-	$data = json_encode( $data );
+	$data = wp_json_encode( $data );
 	$data = base64_encode( $data );
 
 	// Should it be passed as a array or not?

@@ -130,9 +130,9 @@ final class Cachetop {
 
 		// Delete all Cachetop keys from post meta.
 		$sql = "DELETE FROM $wpdb->postmeta WHERE `meta_key` LIKE '%s';";
-		$sql = $wpdb->prepare( $sql, '%_cachetop_%' );
+		$sql = $wpdb->prepare( $sql, '%_cachetop_%' ); // WPCS: unprepared SQL OK
 
-		return $wpdb->query( $sql ) > 0;
+		return $wpdb->query( $sql ) > 0; // WPCS: unprepared SQL OK
 	}
 
 	/**
@@ -446,7 +446,7 @@ final class Cachetop {
 		try {
 			$this->store->set( $hash, $data );
 		} catch ( Exception $e ) {
-
+			return;
 		}
 
 		// Save hash on the post for later use,
@@ -534,8 +534,7 @@ final class Cachetop {
 			'expires' => $this->options->expires
 		];
 
-		$this->store = $this->options->store === 'redis'
-			? Redis::instance( $options ) : Filesystem::instance( $options );
+		$this->store = $this->options->store === 'redis' ? Redis::instance( $options ) : Filesystem::instance( $options );
 	}
 
 	/**
@@ -561,7 +560,7 @@ final class Cachetop {
 
 		// Exclude pages that that exists in the cookies array.
 		foreach ( array_keys( $_COOKIE ) as $cookie ) {
-			if ( in_array( $cookie, $this->options->cookies ) ) {
+			if ( in_array( $cookie, $this->options->cookies, true ) ) {
 				return true;
 			}
 		}

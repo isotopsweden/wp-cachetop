@@ -78,8 +78,6 @@ class Redis extends Store {
 	/**
 	 * Count number of keys.
 	 *
-	 * @param  string $key
-	 *
 	 * @return bool
 	 */
 	public function count() {
