@@ -4,7 +4,5 @@
 
   <exclude-pattern>vendor/*</exclude-pattern>
 
-  <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
-
   <rule ref="Isotop"></rule>
 </ruleset>
