@@ -12,6 +12,15 @@ function cachetop() {
 }
 
 /**
+ * Flush all posts.
+ *
+ * @return bool
+ */
+function cachetop_flush_all_posts() {
+	return cachetop()->flush_all_posts();
+}
+
+/**
  * Flush cached html by hash.
  *
  * @param  string $hash
