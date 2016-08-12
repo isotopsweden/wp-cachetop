@@ -2,9 +2,10 @@
 
 /**
  * Plugin name: Cachetop
+ * Plugin URI: https://github.com/isotopsweden/wc-cachetop
  * Description: Cache pages by generating static HTML and store it in Redis or Filesystem.
  * Author: Isotop AB
- * Author URI: http://www.isotop.se
+ * Author URI: https://www.isotop.se
  * Version: 1.0.0
  * Textdomain: cachetop
  * Domain Path: /languages/
