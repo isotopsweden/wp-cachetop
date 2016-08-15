@@ -55,4 +55,4 @@ The constant `DOING_CACHETOP` will be defined when Cachetop calls a function or 
 
 ## License
 
-MIT
+MIT © Isotop
